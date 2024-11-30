@@ -1,3 +1,11 @@
+# ---- plāns, ko gribam izdarīt ----
+#1 - atšķirības starp ziemeļiem un dienvidiem: raža, tonnas, cukura saturs, kā mainās cukura saturs atkarībā no nokrišņiem ziemeļos un dienvidos
+#2 - kā augsnes tips ietekmē ražu, tonnas un cukura saturu, šķiedras
+#3 - kā augsnes tips kopā ar nokrišņiem ietekmē ražu, tonnas un cukura saturu, šķiedras
+#4 - kā raža atšķiras varietātēm, vecumam, 
+#5 - kā raža atšķiras no ievākšanas mēneša
+
+
 library(readxl)
 cukur<-read_excel("cukurniedres_dati.xlsx")
 head(cukur)
