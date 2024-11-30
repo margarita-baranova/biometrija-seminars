@@ -1,0 +1,15 @@
+---
+title: "Seminārs, datu kopa: cukurniedres"
+author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+#šite rakstisim visu to murgu
+```
+
