@@ -53,7 +53,7 @@ str(cukur)
 
 cukurs_atlasitie = cukur %>%
   mutate(MonthName = month.name[HarvestMonth]) %>% #pārveidojam mēnešus no skaitļiem uz nosaukumiem
-  select(DistrictPosition, SoilName, Area, Variety, Tonn_Hect, Fibre, Sugar, MonthName) #atlasām noteiktas kolonnas, jo ir liekas
+  select(DistrictPosition, SoilName, Age, Area, Variety, Tonn_Hect, Fibre, Sugar, MonthName) #atlasām noteiktas kolonnas, jo ir liekas
 
 
 #---- normalitātes novērtēšana un vilkoksona testi ----
@@ -133,52 +133,129 @@ plot_grid(p1, p2, p3, ncol=3)
 
 #neparametriskās korelācijas metodes ir Spīrmana un Kendala, mēs ņemam Spīrmana (jo tad abām pazīmēm jābūt kvantitatīvām)
 
-#Spīrmena korelācija starp vecumu un šķiedru daudzumu:
+########################################################
+#Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
+########################################################
+
 
 cor.test(cukur$Age, cukur$Fibre, method="spearman") 
 #Nav statistiski būtiskas korelācijas starp cukurniedru augu vecumu un šķiedru daudzumu,
 #jo p vertıba ir lielāka par butiskuma lımeni
 #(S(1003) = 159843313; p = 0.0804).
 
+########################################################
+#Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
+########################################################
 
-#Spīrmena korelācija starp vecumu un šķiedru daudzumu:
 
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 #Ir statistiski būtiska korelācija starp cukurniedru augu vecumu un cukura daudzumu,
 #jo p vertıba ir mazaka par butiskuma lımeni
 #(S(1003) = 212937814; p < 0.0001).
 
+########################################################
+#Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
+########################################################
 
-#Spīrmena korelācija starp vecumu un šķiedru daudzumu:
 
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 #Ir statistiski būtiska korelācija starp cukurniedru augu vecumu un cukura daudzumu,
 #jo p vertıba ir mazaka par butiskuma lımeni
 #(S(1003) = 212937814; p < 0.0001).
 
-
-#Spīrmena korelācija starp vecumu un ražu:
+############################################
+#Spīrmena korelācija starp vecumu un ražu: #
+############################################
 
 cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman") 
 #Nav statistiski būtiskas korelācijas starp cukurniedru augu vecumu un ražu,
 #jo p vertıba ir lielāka par butiskuma lımeni
-#(S(1003) = 1.71e+08; p = 0.7337).
+#(S(1003) = 1.71e+08; p = 0.7337)
 
-
-
-
-
-
-
-
-
-# tā kā dati nav normāli sadalīti
-
-
+#Padomāt vēl par korelācijām....................
 
 
 
 #---- Regresijas analīze ----
+
+modelis_raza1 <- lm(formula = Tonn_Hect ~  Age + MonthName, data = cukurs_atlasitie)
+summary(modelis_raza1)
+
+library(lindia)
+gg_diagnose(modelis_raza1, ncol = 3)
+
+#slikts modelis, fuuu
+
+modelis_raza2 <- lm(formula = Tonn_Hect ~  Age + HarvestMonth, data = cukur)
+summary(modelis)
+
+
+
+
+modelis1 <- lm(formula = Tonn_Hect ~  jul_96, data = cukur)
+summary(modelis1)
+
+###############
+# GLMM modeļi #
+###############
+
+library(ggplot2)
+ggplot(cukur, aes(Variety, Tonn_Hect)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90)) #lielai daļai varietāšu mediānas ir OK
+
+ggplot(cukur, aes(SoilName, Tonn_Hect)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90)) #Virgil un Jarra ir visvairāk tonnu, gan jau visvairāk platības
+
+# GLM modelis - binomiālā regresija? dafak? NEVAR IZMANTOT, JO NAV TĀDU KATEGORIJU!!!!!!!!!! (kā fibrinogēns un globulīns, 20 vairāk vai mazāk bla)
+
+library(ggplot2)
+library(cowplot)
+p1 <- ggplot(cukur, aes(fibrinogen, after_stat(count), fill = ESR)) +
+  geom_density(position = "fill") +
+  theme(legend.position = "top")
+p2 <- ggplot(plasma, aes(globulin, after_stat(count), fill = ESR)) +
+  geom_density(position = "fill") +
+  theme(legend.position = "top")
+plot_grid(p1, p2)
+
+modelis_raza_var <- glm(Tonn_Hect ~ SoilName + Variety, data = cukur, family = poisson)
+summary(modelis_raza_var) 
+
+# GLMER vai kas tas tāds
+
+library(lme4)
+library(lmerTest)
+
+cukur$fMONTH <- factor(cukur$HarvestMonth)
+
+M1 <- lm(Tonn_Hect ~ SoilName * fMONTH, data = cukur) #ŠITO METAM ĀRĀ, JO NU KAS TAS TĀDS?
+summary(M1)
+
+
+Mlmer1 <- glmer(Richness ~ NAP + (1 | fBeach),data=RIKZ,family=poisson())
+Mlmer2 <- glmer(Richness ~ NAP + (1+NAP | fBeach),data=RIKZ,family=poisson()) #jauktos efektus neatdala ar komatu, uzreiz pierakstām formulā, bet liekam iekavās
+Mlmer3 <- glmer(Richness ~ NAP + (NAP-1 | fBeach),data=RIKZ,family=poisson())
+
+
+
+
+
+
+
+
+
+
+
+
+
+M.lm = lm(Tonn_Hect ~ SoilName * Variety, data=cukur)
+cukur$prognoze <- predict(M.lm)
+cukur$atlikums <- resid(M.lm)
+ggplot(cukur, aes(prognoze, atlikums)) + geom_point() #izskatās drausmīgi, ir piltuve, krč, drausmas
+
+
+
+
 
 
 
@@ -190,24 +267,44 @@ cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
 
 # lm modeļi
 
-
+#nevar izmanot, jo nav linearitātes
 
 
 # glm modeļi
-
+#nevar izmantot, jo nav binomiāla
 
 # glmm modeļi
-
+#var izmantot, bet mēs neprotam :(
 
 # gls modeļi
+#laikam nemaz nevaram uztaisīt, nu i dirst!!!!!!!!!!!!!!!!!!!!
+#kas tas tāds vispār ir????
+
+
+
 
 
 # daudzfaktoru metodes (PCA, CA, RDA, CCA, NMDS????????)
 
+cukur_atlasitie_PCA = cukur %>%
+  select(Tonn_Hect, Sugar, Fibre)
 
 
+CUKUR.pca <- prcomp(cukur_atlasitie_PCA, scale. = TRUE)
+summary(CUKUR.pca)
+
+library(ggfortify)
+autoplot(CUKUR.pca) #TRASH
 
 
+cukur_atlasitie_PCA2 = cukur %>%
+  select(Sugar, Fibre)
+
+CUKUR.pca2 <- prcomp(cukur_atlasitie_PCA2, scale. = TRUE)
+summary(CUKUR.pca2)
+
+library(ggfortify)
+autoplot(CUKUR.pca2) #IZSKATĀS JAU CERĪGĀK
 
 
 
