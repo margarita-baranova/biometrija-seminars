@@ -1,3 +1,6 @@
+#kaut kādas izmaiņas
+
+
 library(readxl)
 cukur<-read_excel("cukurniedres_dati.xlsx")
 head(cukur)
