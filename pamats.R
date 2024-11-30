@@ -1,6 +1,7 @@
 library(readxl) 
 
-cukur<-read_excel("cukurniedres_dati.xlsx")
+cukur<-read_excel("cukurniedres_dati.xlsx")  
+
 head(cukur)
 summary(cukur)
 str(cukur)
