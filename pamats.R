@@ -237,31 +237,10 @@ Mlmer2 <- glmer(Richness ~ NAP + (1+NAP | fBeach),data=RIKZ,family=poisson()) #j
 Mlmer3 <- glmer(Richness ~ NAP + (NAP-1 | fBeach),data=RIKZ,family=poisson())
 
 
-
-
-
-
-
-
-
-
-
-
-
 M.lm = lm(Tonn_Hect ~ SoilName * Variety, data=cukur)
 cukur$prognoze <- predict(M.lm)
 cukur$atlikums <- resid(M.lm)
 ggplot(cukur, aes(prognoze, atlikums)) + geom_point() #izskatās drausmīgi, ir piltuve, krč, drausmas
-
-
-
-
-
-
-
-
-
-
 
 #---- Modeļu veidošana dažādām mijiedarbībām ----
 
@@ -281,14 +260,10 @@ ggplot(cukur, aes(prognoze, atlikums)) + geom_point() #izskatās drausmīgi, ir 
 #kas tas tāds vispār ir????
 
 
-
-
-
 # daudzfaktoru metodes (PCA, CA, RDA, CCA, NMDS????????)
 
 cukur_atlasitie_PCA = cukur %>%
   select(Tonn_Hect, Sugar, Fibre)
-
 
 CUKUR.pca <- prcomp(cukur_atlasitie_PCA, scale. = TRUE)
 summary(CUKUR.pca)
@@ -305,6 +280,37 @@ summary(CUKUR.pca2)
 
 library(ggfortify)
 autoplot(CUKUR.pca2) #IZSKATĀS JAU CERĪGĀK
+
+autoplot(CUKUR.pca2, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6) #JUST LOOK AT THIS CHONKER!!!!!!!!!! OR DEVIL IDK, YOU CHOOSE
+
+#### RDA vai nez kas tas ir
+
+spe.hel <- decostand(spe, "hellinger")
+spe.rda <- rda(spe.hel~., env)
+summary(spe.rda)
+
+
+
+
+
+
+
+
+#######################################
+# Ko darīt ar tiem nokrišņu mēnešiem? #
+#######################################
+
+cukur_menesi = cukur %>%
+  select(Sugar, Fibre, Tonn_Hect, jul_96, aug_96, sep_96, oct_96, nov_96, dec_96, jan_97, feb_97, mar_97, apr_97, mai_97, jun_97, jul_97, aug_97, sep_97, oct_97, nov_97, dec_97)
+
+CUKUR.pca3 <- prcomp(cukur_menesi, scale. = TRUE)
+summary(CUKUR.pca3)
+
+autoplot(CUKUR.pca3) #diezgan pašsaprotami, jo ir divi Z un D, tiem atbilstoši nokrišņi
+
+autoplot(CUKUR.pca3, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6)
+
+
 
 
 
