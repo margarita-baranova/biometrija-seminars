@@ -61,5 +61,23 @@ cor.test(cukur$HarvestDuration,cukur$Age, method="spearman")
 
 
 
+#wilcoxon tests
+
+wilcox.test(cukur$Sugar~cukur$DistrictPosition)
+
+
+
+
+
+
+
+#datu pārveidošana
+library(tidyverse)
+cukurs=cukur %>%
+  mutate(MonthName=month.name[HarvestMonth])%>%
+  select(DistrictPosition,SoilName,Variety,Age,Tonn_Hect,Fibre,Sugar,MonthName)
+
+
+
 
 
