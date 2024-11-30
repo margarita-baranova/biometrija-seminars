@@ -1,0 +1,44 @@
+---
+title: "Seminārs, datu kopa: cukurniedres"
+author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
+output: word_document
+---
+Versiju kontrole GitHub.
+
+
+Darba uzdevumi:
+
+Hipotēzes:
+
+Datu apraksts:
+
+Metodes:
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Rezultāti:
+
+```{r}
+#šite rakstisim visu to murgu idk
+```
+
+
+
+Secinājumi:
+
+
+Autoru ieguldījums:
+
+Annija Tija Berņikova-Bondare: Conceptualization,Methodology,Validation, Formal analysis, Writing - Review & Editing,Visualization,Supervision,Project administration
+
+Margarita Baranova:Conceptualization,Methodology,Validation, Formal analysis,Writing - Review & Editing, Visualization,Supervision,Project administration
+
+Katrīna Grebeško:Writing - Original Draft,
+
+Marta Zemīte:Writing - Original Draft,
+
+
+

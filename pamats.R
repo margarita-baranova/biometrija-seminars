@@ -318,6 +318,8 @@ summary(menesi.ca)
 library(ggfortify)
 autoplot(menesi.ca, geom = "text")
 
+#
+
 #korelācija (nesanāk)
 
 p1 <- ggplot(cukur, aes(sample = HarvestMonth)) + geom_qq_band() +
