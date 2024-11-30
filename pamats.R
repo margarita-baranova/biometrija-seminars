@@ -37,3 +37,18 @@ summary(modelis)
 
 modelis1 <- lm(formula = Tonn_Hect ~  jul_96, data = cukur)
 summary(modelis1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
