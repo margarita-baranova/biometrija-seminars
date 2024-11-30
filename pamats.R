@@ -44,9 +44,12 @@ summary(modelis1)
 
 
 
-
-
-
+#korelācijas analīze nenormāli dati
+library(ltm)
+cor.test(cukur$Tonn_Hect,cukur$Fibre, method = "spearman")
+cor.test(cukur$Age, cukur$Sugar,method="spearman")
+cor.test(cukur$HarvestDuration,cukur$Tonn_Hect, method="spearman")
+cor.test(cukur$HarvestDuration,cukur$Age, method="spearman")
 
 
 
