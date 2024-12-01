@@ -7,7 +7,6 @@ library(qqplotr)
 library(cowplot)
 library(ltm)
 library(tidyverse)
-library(tidyverse)
 library(qqplotr)
 library(readxl)
 library(Hmisc)
@@ -71,14 +70,16 @@ ggplot(cukur,aes(DistrictPosition,Sugar))+geom_boxplot() #abām paraugkopām ir 
 
 #Vilkoksona tests divām neatkarīgām paraugkopām:
 
-cukur_district<-wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
+wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
 #W(1005) = 195053; p<0.0001 #ir statistiski būtiska atšķirība starp paraugkopām
+
+wilcox_test_result <- wilcox.test(Sugar ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
 
 -1/(exp(1)*2.2e-16*log(2.2e-16)) #4.638126e+13 reizes atšķirība
 
 wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.483, kas ir vidējs efekts (gandrīz spēcīgs)
 
-sjPlot::tab_model(cukur_district,show.stat=TRUE) # šo mēs neizmantojam, lai atspoguļotu wilcoxon testu, tos mēs aprakstam vnk.
 
 #### šķiedras un ziemeļi/dienvidi:
 
@@ -92,8 +93,12 @@ ggplot(cukur,aes(DistrictPosition,Fibre))+geom_boxplot() #abām paraugkopām ir 
 
 #Vilkoksona tests divām neatkarīgām paraugkopām:
 
-fibre_District<-wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
+wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
 #W(1005) = 113739; p=0.01405 #ir statistiski būtiska atšķirība starp paraugkopām, bet ne tik būtiska kā cukuram
+
+wilcox_test_result <- wilcox.test(Fibre ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
 
 -1/(exp(1)*0.01405*log(0.01405)) #6.14 reizes atšķirība
 
@@ -114,11 +119,43 @@ ggplot(cukur,aes(DistrictPosition,Tonn_Hect))+geom_boxplot() #ļoooooti ietekmī
 wilcox.test(cukur$Tonn_Hect ~ cukur$DistrictPosition)
 #W(1005) = 145532; p<0.0001 #ir statistiski būtiska atšķirība starp paraugkopām
 
+wilcox_test_result <- wilcox.test(Tonn_Hect ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
 -1/(exp(1)*7.126e-06*log(7.126e-06)) #4356 reizes atšķirība
 
 wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.142, kas ir vājš efekts
 
-sjPlot::tab_model(cukur_district, show.stat=TRUE)
+#Vizualizācija:
+ggplot(cukur, aes(x = DistrictPosition, y = Tonn_Hect, fill = DistrictPosition)) +
+  geom_boxplot() +
+  labs(
+    title = "Ražas salīdzinājums starp ziemeļu un dienvidu reģioniem",
+    x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+    y = "Raža (tonnas/hektārs)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
+
+# Vizualizācija (Boxplot ar Wilcoxon rezultātiem)
+ggplot(cukur, aes(x = DistrictPosition, y = Tonn_Hect)) +
+  theme_classic() +
+  geom_boxplot(fill = NA) +
+  geom_jitter(col = "grey", width = 0.25) +
+  stat_n_text(y.pos = max(cukur$Tonn_Hect) * 0.1) + # Grupas N virs diagrammas
+  annotate("text", 
+           y = max(cukur$Tonn_Hect) * 0.95, 
+           x = 1.5, 
+           label = expression("W == 145532"), 
+           parse = TRUE) + # W vērtība no Wilcoxon testa
+  annotate("text", 
+           y = max(cukur$Tonn_Hect) * 0.9, 
+           x = 1.5, 
+           label = "p = 7.126e-06") + # P-vērtība no Wilcoxon testa
+  labs(title = "Ražas salīdzinājums starp ziemeļu un dienvidu reģioniem",
+       x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+       y = "Raža (tonnas/hektārs)")
+
 #---- Korelācijas ----
 #pirms tam paskatīties datu normalitāti:
 
@@ -138,6 +175,20 @@ plot_grid(p1, p2, p3, ncol=3)
 #Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
 ########################################################
 
+#Jauna tabuliņa:
+
+cukur_atlasitie_kor = cukur %>%
+  select(Age, Fibre, Sugar, Tonn_Hect)
+
+library(corrplot)
+
+source("https://www.sthda.com/upload/rquery_cormat.r")
+mydata <- mtcars[, c(1,3,4,5,6,7)]
+require("corrplot")
+rquery.cormat(mydata, method = "spearman")
+warnings()
+korelacijas <- cukur_atlasitie_kor
+rquery.cormat(korelacijas)
 
 cor.test(cukur$Age, cukur$Fibre, method="spearman") 
 #Nav statistiski būtiskas korelācijas starp cukurniedru augu vecumu un šķiedru daudzumu,
@@ -152,7 +203,9 @@ cor.test(cukur$Age, cukur$Fibre, method="spearman")
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 #Ir statistiski būtiska korelācija starp cukurniedru augu vecumu un cukura daudzumu,
 #jo p vertıba ir mazaka par butiskuma lımeni
-#(S(1003) = 212937814; p < 0.0001).
+#(S(1003) = 212937814; p < 0.0001). Korelācijas koeficients rho -0.259 (vāja negatīva korelācija)
+
+
 
 ########################################################
 #Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
@@ -162,7 +215,7 @@ cor.test(cukur$Age, cukur$Sugar, method="spearman")
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 #Ir statistiski būtiska korelācija starp cukurniedru augu vecumu un cukura daudzumu,
 #jo p vertıba ir mazaka par butiskuma lımeni
-#(S(1003) = 212937814; p < 0.0001).
+#(S(1003) = 212937814; p < 0.0001). rho = - 0.259 (vāja negatīva korelācija)
 
 ############################################
 #Spīrmena korelācija starp vecumu un ražu: #
@@ -175,10 +228,30 @@ cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
 
 #Padomāt vēl par korelācijām....................
 
-#Korelācijas vizualizācija
+#Raža ar fibre:
+cor.test(cukur$Tonn_Hect, cukur$Fibre, method = "spearman")
+#Ir statistiski būtiska korelācija starp cukurniedru ražu un šķiedru daudzumu,
+#jo p vertıba ir mazāka par butiskuma lımeni
+#(S(1003) = 189086479; p = 0.000185), rho = - 0.118 (ļoti vāja negatīva korelācija)
 
-cukurs_kor = cukur %>%
-  select(Age,Tonn_Hect, Fibre, Sugar)
+
+#Raža ar cukuru
+cor.test(cukur$Tonn_Hect, cukur$Sugar, method = "spearman")
+#Ir statistiski būtiska korelācija starp cukurniedru ražu un šķiedru daudzumu,
+#jo p vertıba ir mazāka par butiskuma lımeni
+#(S(1003) = 147440361; p < 0.0001), rho = 0.128 (ļoti vāja pozitīva korelācija)
+
+#Cukurs ar fibre
+cor.test(cukur$Sugar, cukur$Fibre, method = "spearman")
+#Ir statistiski būtiska korelācija starp cukurniedru ražu un šķiedru daudzumu,
+#jo p vertıba ir mazāka par butiskuma lımeni
+#(S(1003) = 191662599; p = 2.372e-05), rho = - 0.133 (ļoti vāja negatīva korelācija)
+
+#Kaut kāda random vizualizācija šim murgam:
+
+korelacijas <- cukur_atlasitie_kor
+rquery.cormat(korelacijas)
+
 
 
 
@@ -193,7 +266,7 @@ gg_diagnose(modelis_raza1, ncol = 3)
 #slikts modelis, fuuu
 
 modelis_raza2 <- lm(formula = Tonn_Hect ~  Age + HarvestMonth, data = cukur)
-summary(modelis)
+summary(modelis_raza2) #vēl sliktāks modelis, bleurgh
 
 
 
@@ -212,6 +285,18 @@ ggplot(cukur, aes(Variety, Tonn_Hect)) + geom_boxplot() +
 ggplot(cukur, aes(SoilName, Tonn_Hect)) + geom_boxplot() +
   theme(axis.text.x=element_text(angle=90)) #Virgil un Jarra ir visvairāk tonnu, gan jau visvairāk platības
 
+ggplot(cukur, aes(SoilName, Sugar)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90)) #Mission visvairāk
+
+ggplot(cukur, aes(SoilName, Fibre)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90)) #visiem ļoti līdzīgi
+
+ggplot(cukur, aes(Variety, Sugar)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90))
+
+ggplot(cukur, aes(Variety, Fibre)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90))
+
 # GLM modelis - binomiālā regresija? dafak? NEVAR IZMANTOT, JO NAV TĀDU KATEGORIJU!!!!!!!!!! (kā fibrinogēns un globulīns, 20 vairāk vai mazāk bla)
 
 library(ggplot2)
@@ -227,6 +312,79 @@ plot_grid(p1, p2)
 modelis_raza_var <- glm(Tonn_Hect ~ SoilName + Variety, data = cukur, family = poisson)
 summary(modelis_raza_var) 
 
+#GEMINI uzteiktais modelis:
+
+model <- lm(Tonn_Hect ~ Area + Age + HarvestMonth, data = cukur)
+summary(model) #šitais ir modelis ir vislabākais no visiem, ko esam taisījušas
+
+plot(model) #WELL WELL WELL THE RESIDUALS ARE *NOT* NORMALLY DISTRIBUTED
+
+
+model1 <- lm(Sugar ~ Area + Age + HarvestMonth, data = cukur)
+summary(model1) #Izskaidro 7 % no mainības, HarvestMonth nav būtisks
+
+
+model2 <- lm(Tonn_Hect ~ SoilName + Age, data = cukur)
+summary(model2) #SUUUUUDS
+
+
+model3 <- lm(Tonn_Hect ~ SoilName*Age, data = cukur)
+summary(model3) #vēl joprojām sūds
+
+
+model4 <- lm(Sugar ~ SoilName + DistrictPosition, data = cukur)
+summary(model4) #šitais jau ir labs, izskaidro 31 %, mediāna ok, augsnes tipi gandrīz visi ir būtiski
+
+gg_diagnose(model4, ncol = 2) #šitais principā USABLE (c) Annija
+plot(model4)
+
+qqPlot(residuals(model4)) #piltuve
+
+model6 <- lm(Sugar ~ SoilName * DistrictPosition, data = cukur)
+summary(model6)
+
+
+model5 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
+summary(model5) #nav labs, tikai 2%
+
+model7 <- lm(Sugar ~ SoilName + Variety, data = cukur)
+summary(model7)
+
+gg_diagnose(model7, ncol = 2) #ir nedaudz sliktāks par to labo
+
+qqPlot(residuals(model7)) #ir labāk 
+
+
+model8 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
+summary(model8) #būtu ok, ja nebūtu 2 procenti
+
+
+model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
+summary(model9) #Not the best one
+
+gg_diagnose(model9, ncol = 2) #ai figņa
+
+# mums pagaidām vislabāk sanāk ar tiešajiem efektiem, nevis jauktajiem.
+
+model10<- lm(Tonn_Hect ~ Variety + Age, data=cukur)
+summary(model10) #nononononnon
+
+gg_diagnose(model10, ncol = 2) #mēsls
+
+model11<- lm(Sugar ~ Variety + Age, data=cukur)
+summary(model11) # nav praktiski nekas būtisks, 21% normāla mediāna
+
+model12<- lm(Sugar ~ Variety, data=cukur)
+summary(model12) # nekas butisks tikai intercept
+
+model13<- lm(Fibre ~ Variety + Age, data=cukur)
+summary(model13) # nekas labs nav
+
+model14<- lm(Tonn_Hect~ Variety + Age, data=cukur)
+summary(model14) #fuflo
+
+
+
 # GLMER vai kas tas tāds
 
 library(lme4)
@@ -237,9 +395,19 @@ cukur$fMONTH <- factor(cukur$HarvestMonth)
 M1 <- lm(Tonn_Hect ~ SoilName * fMONTH, data = cukur) #ŠITO METAM ĀRĀ, JO NU KAS TAS TĀDS?
 summary(M1)
 
+library(nlme)
+mod <- lmList(Sugar ~ Tonn_Hect|DistrictPosition, data = cukur)
+summary(mod) #laikam nebija jēgas taisīt !!!!!
 
-Mlmer1 <- glmer(Sugar ~ Tonn_Hect + (1 | SoilName),data=cukur,family=poisson()) #karoč 
-summary(Mlmer1)
+cukur$fHarvestMonth <- factor(cukur$HarvestMonth)
+Mlme1 <- lme(Sugar ~ Age, random = ~1 | fHarvestMonth, data=cukur)
+summary(Mlme1) #es nezinu, ko ar šo darīt, vai tas vispār ir jēdzīgi/////:
+
+
+
+
+
+Mlmer1 <- glmer(Sugar ~  + (1 | fBeach),data=RIKZ,family=poisson())
 Mlmer2 <- glmer(Richness ~ NAP + (1+NAP | fBeach),data=RIKZ,family=poisson()) #jauktos efektus neatdala ar komatu, uzreiz pierakstām formulā, bet liekam iekavās
 Mlmer3 <- glmer(Richness ~ NAP + (NAP-1 | fBeach),data=RIKZ,family=poisson())
 
@@ -288,7 +456,7 @@ summary(CUKUR.pca2)
 library(ggfortify)
 autoplot(CUKUR.pca2) #IZSKATĀS JAU CERĪGĀK
 
-autoplot(CUKUR.pca2, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6) #JUST LOOK AT THIS CHONKER!!!!!!!!!! OR DEVIL IDK, YOU CHOOSE
+autoplot(CUKUR.pca2, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 3) #JUST LOOK AT THIS CHONKER!!!!!!!!!! OR DEVIL IDK, YOU CHOOSE
 
 #### RDA vai nez kas tas ir
 
@@ -316,16 +484,6 @@ summary(CUKUR.pca3)
 autoplot(CUKUR.pca3) #diezgan pašsaprotami, jo ir divi Z un D, tiem atbilstoši nokrišņi
 
 autoplot(CUKUR.pca3, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6)
-
-library(vegan)
-menesi.ca <- cca(cukur_menesi)
-menesi.ca
-
-summary(menesi.ca)
-library(ggfortify)
-autoplot(menesi.ca, geom = "text")
-
-#
 
 #korelācija (nesanāk)
 
