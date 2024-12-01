@@ -3,7 +3,7 @@ title: "Seminārs, datu kopa: cukurniedres"
 author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
 output: word_document
 ---
-Versiju kontrole GitHub.
+Versiju kontrole GitHub...
 
 
 Darba uzdevumi:
