@@ -7,7 +7,6 @@ library(qqplotr)
 library(cowplot)
 library(ltm)
 library(tidyverse)
-library(tidyverse)
 library(qqplotr)
 library(readxl)
 library(Hmisc)
@@ -74,6 +73,9 @@ ggplot(cukur,aes(DistrictPosition,Sugar))+geom_boxplot() #abām paraugkopām ir 
 wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
 #W(1005) = 195053; p<0.0001 #ir statistiski būtiska atšķirība starp paraugkopām
 
+wilcox_test_result <- wilcox.test(Sugar ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
 -1/(exp(1)*2.2e-16*log(2.2e-16)) #4.638126e+13 reizes atšķirība
 
 wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.483, kas ir vidējs efekts (gandrīz spēcīgs)
@@ -94,6 +96,10 @@ ggplot(cukur,aes(DistrictPosition,Fibre))+geom_boxplot() #abām paraugkopām ir 
 wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
 #W(1005) = 113739; p=0.01405 #ir statistiski būtiska atšķirība starp paraugkopām, bet ne tik būtiska kā cukuram
 
+wilcox_test_result <- wilcox.test(Fibre ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
+
 -1/(exp(1)*0.01405*log(0.01405)) #6.14 reizes atšķirība
 
 wilcox_effsize(data=cukur,Fibre~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.076, kas ir ļoti vājš efekts
@@ -113,10 +119,42 @@ ggplot(cukur,aes(DistrictPosition,Tonn_Hect))+geom_boxplot() #ļoooooti ietekmī
 wilcox.test(cukur$Tonn_Hect ~ cukur$DistrictPosition)
 #W(1005) = 145532; p<0.0001 #ir statistiski būtiska atšķirība starp paraugkopām
 
+wilcox_test_result <- wilcox.test(Tonn_Hect ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
 -1/(exp(1)*7.126e-06*log(7.126e-06)) #4356 reizes atšķirība
 
 wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.142, kas ir vājš efekts
 
+#Vizualizācija:
+ggplot(cukur, aes(x = DistrictPosition, y = Tonn_Hect, fill = DistrictPosition)) +
+  geom_boxplot() +
+  labs(
+    title = "Ražas salīdzinājums starp ziemeļu un dienvidu reģioniem",
+    x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+    y = "Raža (tonnas/hektārs)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
+
+# Vizualizācija (Boxplot ar Wilcoxon rezultātiem)
+ggplot(cukur, aes(x = DistrictPosition, y = Tonn_Hect)) +
+  theme_classic() +
+  geom_boxplot(fill = NA) +
+  geom_jitter(col = "grey", width = 0.25) +
+  stat_n_text(y.pos = max(cukur$Tonn_Hect) * 0.1) + # Grupas N virs diagrammas
+  annotate("text", 
+           y = max(cukur$Tonn_Hect) * 0.95, 
+           x = 1.5, 
+           label = expression("W == 145532"), 
+           parse = TRUE) + # W vērtība no Wilcoxon testa
+  annotate("text", 
+           y = max(cukur$Tonn_Hect) * 0.9, 
+           x = 1.5, 
+           label = "p = 7.126e-06") + # P-vērtība no Wilcoxon testa
+  labs(title = "Ražas salīdzinājums starp ziemeļu un dienvidu reģioniem",
+    x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+    y = "Raža (tonnas/hektārs)")
 
 #---- Korelācijas ----
 #pirms tam paskatīties datu normalitāti:
@@ -137,6 +175,20 @@ plot_grid(p1, p2, p3, ncol=3)
 #Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
 ########################################################
 
+#Jauna tabuliņa:
+
+cukur_atlasitie_kor = cukur %>%
+  select(Age, Fibre, Sugar, Tonn_Hect)
+
+library(corrplot)
+
+source("https://www.sthda.com/upload/rquery_cormat.r")
+mydata <- mtcars[, c(1,3,4,5,6,7)]
+require("corrplot")
+rquery.cormat(mydata, method = "spearman")
+warnings()
+korelacijas <- cukur_atlasitie_kor
+rquery.cormat(korelacijas)
 
 cor.test(cukur$Age, cukur$Fibre, method="spearman") 
 #Nav statistiski būtiskas korelācijas starp cukurniedru augu vecumu un šķiedru daudzumu,
@@ -151,7 +203,9 @@ cor.test(cukur$Age, cukur$Fibre, method="spearman")
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 #Ir statistiski būtiska korelācija starp cukurniedru augu vecumu un cukura daudzumu,
 #jo p vertıba ir mazaka par butiskuma lımeni
-#(S(1003) = 212937814; p < 0.0001).
+#(S(1003) = 212937814; p < 0.0001). Korelācijas koeficients rho -0.259 (vāja negatīva korelācija)
+
+
 
 ########################################################
 #Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
@@ -161,7 +215,7 @@ cor.test(cukur$Age, cukur$Sugar, method="spearman")
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 #Ir statistiski būtiska korelācija starp cukurniedru augu vecumu un cukura daudzumu,
 #jo p vertıba ir mazaka par butiskuma lımeni
-#(S(1003) = 212937814; p < 0.0001).
+#(S(1003) = 212937814; p < 0.0001). rho = - 0.259 (vāja negatīva korelācija)
 
 ############################################
 #Spīrmena korelācija starp vecumu un ražu: #
@@ -173,6 +227,31 @@ cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
 #(S(1003) = 1.71e+08; p = 0.7337)
 
 #Padomāt vēl par korelācijām....................
+
+#Raža ar fibre:
+cor.test(cukur$Tonn_Hect, cukur$Fibre, method = "spearman")
+#Ir statistiski būtiska korelācija starp cukurniedru ražu un šķiedru daudzumu,
+#jo p vertıba ir mazāka par butiskuma lımeni
+#(S(1003) = 189086479; p = 0.000185), rho = - 0.118 (ļoti vāja negatīva korelācija)
+
+
+#Raža ar cukuru
+cor.test(cukur$Tonn_Hect, cukur$Sugar, method = "spearman")
+#Ir statistiski būtiska korelācija starp cukurniedru ražu un šķiedru daudzumu,
+#jo p vertıba ir mazāka par butiskuma lımeni
+#(S(1003) = 147440361; p < 0.0001), rho = 0.128 (ļoti vāja pozitīva korelācija)
+
+#Cukurs ar fibre
+cor.test(cukur$Sugar, cukur$Fibre, method = "spearman")
+#Ir statistiski būtiska korelācija starp cukurniedru ražu un šķiedru daudzumu,
+#jo p vertıba ir mazāka par butiskuma lımeni
+#(S(1003) = 191662599; p = 2.372e-05), rho = - 0.133 (ļoti vāja negatīva korelācija)
+
+#Kaut kāda random vizualizācija šim murgam:
+
+korelacijas <- cukur_atlasitie_kor
+rquery.cormat(korelacijas)
+
 
 
 
@@ -187,7 +266,7 @@ gg_diagnose(modelis_raza1, ncol = 3)
 #slikts modelis, fuuu
 
 modelis_raza2 <- lm(formula = Tonn_Hect ~  Age + HarvestMonth, data = cukur)
-summary(modelis)
+summary(modelis_raza2) #vēl sliktāks modelis, bleurgh
 
 
 
@@ -281,7 +360,7 @@ summary(CUKUR.pca2)
 library(ggfortify)
 autoplot(CUKUR.pca2) #IZSKATĀS JAU CERĪGĀK
 
-autoplot(CUKUR.pca2, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6) #JUST LOOK AT THIS CHONKER!!!!!!!!!! OR DEVIL IDK, YOU CHOOSE
+autoplot(CUKUR.pca2, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 3) #JUST LOOK AT THIS CHONKER!!!!!!!!!! OR DEVIL IDK, YOU CHOOSE
 
 #### RDA vai nez kas tas ir
 
@@ -309,12 +388,6 @@ summary(CUKUR.pca3)
 autoplot(CUKUR.pca3) #diezgan pašsaprotami, jo ir divi Z un D, tiem atbilstoši nokrišņi
 
 autoplot(CUKUR.pca3, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6)
-
-
-
-
-
-
 
 #korelācija (nesanāk)
 
