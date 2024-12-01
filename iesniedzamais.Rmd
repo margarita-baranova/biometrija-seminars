@@ -6,7 +6,7 @@ output: word_document
 Versiju kontrole GitHub.
 
 
-Darba uzdevumi:
+**Darba uzdevumi:**
 
 1. Veikt normalitātes pārbaudi.
 2. Veikt Viloksona testa paraugkopu salīdzināšanu.
@@ -15,14 +15,14 @@ Darba uzdevumi:
 5. Izveidot jaukta efekta modeli.
 6. Veikt datu vizualizāciju.
 
-Problēmas: 
+**Problēmas:**
 
 1. Kā lauka novietojums ietekmē cukura daudzumu, šķiedru daudzumu un ražas apjomu?
 2. Vai ir saistība starp cukurniedru vecumu un šķiedru daudzumu?
 3. Vai ir saistība strap cukurniedru vecumu un cukura daudzumu?
 4. Vai ir sastība starp cukurniedru vecumu un ražu?
 
-Hipotēzes:
+**Hipotēzes:**
 
 1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu, kā arī šķiedru daudzumu un ražas apjomu.
 2. Cukurniedru šķiedru daudzums nav saistīts ar vecumu.
@@ -30,7 +30,7 @@ Hipotēzes:
 4. Cukurniedru ražas daudzums ir saistīts ar vecumu.
 
 
-Datu apraksts:
+**Datu apraksts:**
 
 Šajā failā ir atrodama informācija par 1005 cukurniedru laukiem.
 
@@ -49,16 +49,39 @@ Dati:
 * - jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
 
 
-Metodes:
+**Metodes:**
 
 Izmantota kotrole GitHub.
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages({
+library(readxl)
+library(qqplotr)
+library(ggplot2)
+library(cowplot)
+library(ltm)
+library(tidyverse)
+library(qqplotr)
+library(readxl)
+library(Hmisc)
+library(EnvStats)
+library(rstatix)
+library(pwr)
+library(rcompanion)
+library(car)
+library(agricolae)
+library(lindia)
+  
+})
+```
+
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Rezultāti:
+**Rezultāti:**
 
 ## Korelācijas
 ### Datu normalitātes pārbaude
@@ -138,7 +161,8 @@ rquery.cormat(korelacijas)
 ```
 
 
-Secinājumi:
+
+**Secinājumi:**
 
 1.
 2. 
@@ -148,7 +172,7 @@ Secinājumi:
 6.
 
 
-Autoru ieguldījums:
+**Autoru ieguldījums:**
 
 Annija Tija Berņikova-Bondare: Conceptualization,Methodology,Validation, Formal analysis, Writing - Review & Editing,Visualization,Supervision,Project administration
 
