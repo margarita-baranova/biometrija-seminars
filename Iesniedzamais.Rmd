@@ -298,6 +298,70 @@ summary(modelis_raza2) #neņemam, jo mediāna ir vēl vairāk nobīdīta no null
 
 Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis kopumā nav būtisks (F(2,1002)=1.187, p= 0.3056 ). Turklāt atsevišķu regresoru ietekme nav statistiski nozīmīga.
 
+## Jaukta efekta modeļi
+
+```{r,  echo=FALSE}
+
+
+model <- lm(Tonn_Hect ~ Area + Age + HarvestMonth, data = cukur)
+summary(model)
+plot(model)
+
+```
+
+Regresijas modelis izskaidro 72,01% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=862,2; p < 2.2e-16), atsevišķu regresoru ietekmes ir būtiskas. Taču atlikuma vērtības nav normāli sadalītas.
+
+
+```{r,  echo=FALSE}
+
+
+model1 <- lm(Sugar ~ Area + Age + HarvestMonth, data = cukur)
+summary(model1) 
+
+```
+
+Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=29.22; p < 2.2e-16), bet Harvestmonth ietekme nav būtiska. 
+
+```{r,  echo=FALSE}
+
+
+model2 <- lm(Tonn_Hect ~ SoilName + Age, data = cukur)
+summary(model2)
+
+
+```
+
+Regresijas modelis izskaidro tikai 7,6% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=4.618, p < 0.0001). Atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
+
+```{r,  echo=FALSE}
+
+
+model3 <- lm(Tonn_Hect ~ SoilName*Age, data = cukur)
+summary(model3) #Ir statistiski būtisks, jo F(960;44)=3.011, p < 0.0001, Radj = 0.081, mediāna nobīdīta no nulles (-53.53), atmetam
+
+
+```
+
+Regresijas modelis izskaidro tikai 8,1% no vērtību variēšanas, modelis kopumā ir būtisks (F(960;44)=3.011, p < 0.0001). Taču faktoru ietekmes nav statistiski nozīmīgas.
+
+```{r,  echo=FALSE}
+
+model4 <- lm(Sugar ~ SoilName + DistrictPosition, data = cukur)
+summary(model4)
+
+gg_diagnose(model4, ncol = 2) 
+plot(model4) 
+
+
+```
+
+
+Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=20.95, p < 0.0001). Turklāt atsevišķu regresoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikasnovērots, ka atlikumu vērtības izskatās normāli sadalītas, Cook's distance vertıbas atbilstošas, taču ir dažas ietekmīgās vērtības.
+
+
+
+
+
 #  Secinājumi:
 
 
