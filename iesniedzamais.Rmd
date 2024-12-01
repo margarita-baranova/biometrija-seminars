@@ -8,15 +8,16 @@ Versiju kontrole GitHub.
 
 Darba uzdevumi:
 
+Problēmas: 
+1. kā lauka novietojums ietekmē cukura daudzumu, šķiedru daudzumu un ražas apjomu?
+
 Hipotēzes:
 
-1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu
-2. Starp Cukurniedru lauka novietojumiem Austrālijas dienvidos vai ziemeļos ir novērojamas šķiedru daudzumu atšķirības 
-3. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē ražas apjomu
-#mošk apvienot vienā ^
+1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu, kā arī šķiedru daudzumu un ražas apjomu
+
 4.Starp cukurniedru vecumu un šķiedru daudzuma nav statistiski nozīmīgas korelācijas
 #šādi vairāk izklausās pēc secinājuma me dont like 
-5.
+5. 
 
 Datu apraksts:
 
