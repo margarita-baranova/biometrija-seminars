@@ -366,6 +366,9 @@ gg_diagnose(model9, ncol = 2) #ai figņa
 
 
 
+
+
+
 # GLMER vai kas tas tāds
 
 library(lme4)
@@ -446,9 +449,43 @@ spe.rda <- rda(spe.hel~., env)
 summary(spe.rda)
 
 
+#### K MEANS
+
+cukur.norm <- scale(cukur_atlasitie_kor) #dati ir dažādās mērvienībās, mērogošana, centrēšana ap vidējo, dalīšana ar stdev, f-ja scale
+head(cukur.norm, n = 1) 
+
+cukur.kmeans <- kmeans(cukur.norm, centers = 4,nstart = 100) #k vidējie, k grupu skaits
+cukur.kmeans
+
+cukur.kmeans$cluster
+
+fviz_cluster(cukur.kmeans, data = cukur, na.rm= TRUE,
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800"), 
+             geom = "point",
+             ellipse.type = "convex", 
+             ggtheme = theme_bw()
+)
 
 
+library(ggpubr)
+library(factoextra)
 
+data("iris")
+df <- iris
+head(df, 3)
+
+# Compute k-means with k = 3
+set.seed(123)
+res.km <- kmeans(scale(df[, -5]), 3, nstart = 25)
+# K-means clusters showing the group of each individuals
+res.km$cluster
+
+fviz_cluster(res.km, data = df[, -5],
+             palette = c("#2E9FDF", "#00AFBB", "#E7B800"), 
+             geom = "point",
+             ellipse.type = "convex", 
+             ggtheme = theme_bw()
+)
 
 
 
