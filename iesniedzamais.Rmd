@@ -19,17 +19,15 @@ Problēmas:
 
 1. Kā lauka novietojums ietekmē cukura daudzumu, šķiedru daudzumu un ražas apjomu?
 2. Kāda ir korelācija starp cukurniedru vecumu un šķiedru daudzumu?
-3.
-4.
-5.
+3. Kāda ir korelācija strap cukurniedru vecumu un cukura daudzumu?
+4. Kāda ir korelācija starp cukurniedru vecumu un ražu?
 
 Hipotēzes:
 
 1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu, kā arī šķiedru daudzumu un ražas apjomu
-2.
-3.
-4.
-5. 
+2. 
+3. 
+4. 
 
 4.Starp cukurniedru vecumu un šķiedru daudzuma nav statistiski nozīmīgas korelācijas
 #šādi vairāk izklausās pēc secinājuma me dont like 
