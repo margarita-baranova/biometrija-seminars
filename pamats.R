@@ -464,7 +464,7 @@ fviz_cluster(cukur.kmeans, data = cukur, na.rm= TRUE,
              geom = "point",
              ellipse.type = "convex", 
              ggtheme = theme_bw()
-)
+)a
 
 
 library(ggpubr)
