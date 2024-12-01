@@ -63,6 +63,7 @@ library(pwr)
 library(rcompanion)
 library(car)
 library(agricolae)
+library(lindia)
   
 })                             
 ```
@@ -74,6 +75,11 @@ cukur<-read_excel("cukurniedres_dati.xlsx")
 head(cukur)
 summary(cukur)
 str(cukur)
+
+cukurs_atlasitie = cukur %>%
+  mutate(MonthName = month.name[HarvestMonth]) %>% 
+  select(DistrictPosition, SoilName, Age, Area, Variety, Tonn_Hect, Fibre, Sugar, MonthName)
+
 ```
 
 
@@ -267,7 +273,30 @@ wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efek
 
 Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.142 standartnovirzes (95% CI 0.2...0.08).
 
+# Regresijas analīze:
+```{r,  echo=FALSE}
 
+
+modelis_raza1 <- lm(formula = Tonn_Hect ~  Age + MonthName, data = cukurs_atlasitie)
+summary(modelis_raza1) #neņēmām, jo mediāna ļoti nobīdīta no nulles (-68.56) un Radj ir 0.0086
+gg_diagnose(modelis_raza1, ncol = 3) 
+
+
+
+
+```
+
+Regresijas modelis izskaidro tikai 0.87 % no vērtību variācijas, modelis kopumā ir būtisks (F(2,1002)=2.463, p= 0.02275 ). Taču atsevišķu regresoru ietekme nav statistiski nozīmīga. Arī Kuka distances pārsniedz robežlīniju, atlikumu vērtības nav normāli sadalītas
+
+```{r,  echo=FALSE}
+
+
+modelis_raza2 <- lm(formula = Tonn_Hect ~  Age + HarvestMonth, data = cukur)
+summary(modelis_raza2) #neņemam, jo mediāna ir vēl vairāk nobīdīta no nulles (-70.83) un Radj ir 0.00037
+
+```
+
+Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis kopumā nav būtisks (F(2,1002)=1.187, p= 0.3056 ). Turklāt atsevišķu regresoru ietekme nav statistiski nozīmīga.
 
 #  Secinājumi:
 
