@@ -71,13 +71,14 @@ ggplot(cukur,aes(DistrictPosition,Sugar))+geom_boxplot() #abām paraugkopām ir 
 
 #Vilkoksona tests divām neatkarīgām paraugkopām:
 
-wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
+cukur_district<-wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
 #W(1005) = 195053; p<0.0001 #ir statistiski būtiska atšķirība starp paraugkopām
 
 -1/(exp(1)*2.2e-16*log(2.2e-16)) #4.638126e+13 reizes atšķirība
 
 wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.483, kas ir vidējs efekts (gandrīz spēcīgs)
 
+sjPlot::tab_model(cukur_district,show.stat=TRUE) # šo mēs neizmantojam, lai atspoguļotu wilcoxon testu, tos mēs aprakstam vnk.
 
 #### šķiedras un ziemeļi/dienvidi:
 
@@ -91,7 +92,7 @@ ggplot(cukur,aes(DistrictPosition,Fibre))+geom_boxplot() #abām paraugkopām ir 
 
 #Vilkoksona tests divām neatkarīgām paraugkopām:
 
-wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
+fibre_District<-wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
 #W(1005) = 113739; p=0.01405 #ir statistiski būtiska atšķirība starp paraugkopām, bet ne tik būtiska kā cukuram
 
 -1/(exp(1)*0.01405*log(0.01405)) #6.14 reizes atšķirība
@@ -117,7 +118,7 @@ wilcox.test(cukur$Tonn_Hect ~ cukur$DistrictPosition)
 
 wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.142, kas ir vājš efekts
 
-
+sjPlot::tab_model(cukur_district, show.stat=TRUE)
 #---- Korelācijas ----
 #pirms tam paskatīties datu normalitāti:
 
@@ -173,6 +174,11 @@ cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
 #(S(1003) = 1.71e+08; p = 0.7337)
 
 #Padomāt vēl par korelācijām....................
+
+#Korelācijas vizualizācija
+
+cukurs_kor = cukur %>%
+  select(Age,Tonn_Hect, Fibre, Sugar)
 
 
 
@@ -232,7 +238,8 @@ M1 <- lm(Tonn_Hect ~ SoilName * fMONTH, data = cukur) #ŠITO METAM ĀRĀ, JO NU 
 summary(M1)
 
 
-Mlmer1 <- glmer(Richness ~ NAP + (1 | fBeach),data=RIKZ,family=poisson())
+Mlmer1 <- glmer(Sugar ~ Tonn_Hect + (1 | SoilName),data=cukur,family=poisson()) #karoč 
+summary(Mlmer1)
 Mlmer2 <- glmer(Richness ~ NAP + (1+NAP | fBeach),data=RIKZ,family=poisson()) #jauktos efektus neatdala ar komatu, uzreiz pierakstām formulā, bet liekam iekavās
 Mlmer3 <- glmer(Richness ~ NAP + (NAP-1 | fBeach),data=RIKZ,family=poisson())
 
