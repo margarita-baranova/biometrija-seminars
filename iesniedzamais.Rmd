@@ -107,6 +107,36 @@ cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un ražas daudzumu nav statistiski būtiska korelācija (S(1003) = 1.71e+08; p = 0.7337); p>0.0001 
 
+### Spīrmena korelācija starp ražas un šķiedru daudzumu:
+
+```{r, echo=FALSE}
+cor.test(cukur$Tonn_Hect, cukur$Fibre, method = "spearman")
+```
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru ražas un šķiedru daudzuma ir statistiski būtiska korelācija (S(1003) = 189086479; p = 0.000185); p < 0.0001.
+rho = - 0.118 (ļoti vāja negatīva korelācija)
+
+### Spīrmena korelācija starp ražas un cukura daudzumu:
+
+```{r, echo=FALSE}
+cor.test(cukur$Tonn_Hect, cukur$Sugar, method = "spearman")
+```
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru ražas un cukura daudzuma ir statistiski būtiska korelācija (S(1003) = 147440361; p < 0.0001)
+rho = 0.128 (ļoti vāja pozitīva korelācija)
+
+### Spīrmena korelācija starp cukura un šķiedru daudzumu:
+
+```{r, echo=FALSE}
+cor.test(cukur$Sugar, cukur$Fibre, method = "spearman")
+```
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru cukura un šķiedru daudzuma ir statistiski būtiska atšķirība S(1003) = 191662599; p < 0.0001)
+rho = - 0.133 (ļoti vāja negatīva korelācija)
+
+### Korelāciju vizualizācija 
+```{r, echo=FALSE}
+korelacijas <- cukur_atlasitie_kor
+rquery.cormat(korelacijas)
+```
+
 
 Secinājumi:
 
