@@ -285,6 +285,18 @@ ggplot(cukur, aes(Variety, Tonn_Hect)) + geom_boxplot() +
 ggplot(cukur, aes(SoilName, Tonn_Hect)) + geom_boxplot() +
   theme(axis.text.x=element_text(angle=90)) #Virgil un Jarra ir visvairāk tonnu, gan jau visvairāk platības
 
+ggplot(cukur, aes(SoilName, Sugar)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90)) #Mission visvairāk
+
+ggplot(cukur, aes(SoilName, Fibre)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90)) #visiem ļoti līdzīgi
+
+ggplot(cukur, aes(Variety, Sugar)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90))
+
+ggplot(cukur, aes(Variety, Fibre)) + geom_boxplot() +
+  theme(axis.text.x=element_text(angle=90))
+
 # GLM modelis - binomiālā regresija? dafak? NEVAR IZMANTOT, JO NAV TĀDU KATEGORIJU!!!!!!!!!! (kā fibrinogēns un globulīns, 20 vairāk vai mazāk bla)
 
 library(ggplot2)
@@ -300,6 +312,60 @@ plot_grid(p1, p2)
 modelis_raza_var <- glm(Tonn_Hect ~ SoilName + Variety, data = cukur, family = poisson)
 summary(modelis_raza_var) 
 
+#GEMINI uzteiktais modelis:
+
+model <- lm(Tonn_Hect ~ Area + Age + HarvestMonth, data = cukur)
+summary(model) #šitais ir modelis ir vislabākais no visiem, ko esam taisījušas
+
+plot(model) #WELL WELL WELL THE RESIDUALS ARE *NOT* NORMALLY DISTRIBUTED
+
+
+model1 <- lm(Sugar ~ Area + Age + HarvestMonth, data = cukur)
+summary(model1) #Izskaidro 7 % no mainības, HarvestMonth nav būtisks
+
+
+model2 <- lm(Tonn_Hect ~ SoilName + Age, data = cukur)
+summary(model2) #SUUUUUDS
+
+
+model3 <- lm(Tonn_Hect ~ SoilName*Age, data = cukur)
+summary(model3) #vēl joprojām sūds
+
+
+model4 <- lm(Sugar ~ SoilName + DistrictPosition, data = cukur)
+summary(model4) #šitais jau ir labs, izskaidro 31 %, mediāna ok, augsnes tipi gandrīz visi ir būtiski
+
+gg_diagnose(model4, ncol = 2) #šitais principā USABLE (c) Annija
+plot(model4)
+
+model6 <- lm(Sugar ~ SoilName * DistrictPosition, data = cukur)
+summary(model6)
+
+
+model5 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
+summary(model5) #nav labs, tikai 2%
+
+model7 <- lm(Sugar ~ SoilName + Variety, data = cukur)
+summary(model7)
+
+gg_diagnose(model7, ncol = 2) #ir nedaudz sliktāks par to labo
+
+
+model8 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
+summary(model8) #būtu ok, ja nebūtu 2 procenti
+
+
+model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
+summary(model9) #Not the best one
+
+gg_diagnose(model9, ncol = 2) #ai figņa
+
+
+
+
+
+
+
 # GLMER vai kas tas tāds
 
 library(lme4)
@@ -310,8 +376,19 @@ cukur$fMONTH <- factor(cukur$HarvestMonth)
 M1 <- lm(Tonn_Hect ~ SoilName * fMONTH, data = cukur) #ŠITO METAM ĀRĀ, JO NU KAS TAS TĀDS?
 summary(M1)
 
+library(nlme)
+mod <- lmList(Sugar ~ Tonn_Hect|DistrictPosition, data = cukur)
+summary(mod) #laikam nebija jēgas taisīt !!!!!
 
-Mlmer1 <- glmer(Richness ~ NAP + (1 | fBeach),data=RIKZ,family=poisson())
+cukur$fHarvestMonth <- factor(cukur$HarvestMonth)
+Mlme1 <- lme(Sugar ~ Age, random = ~1 | fHarvestMonth, data=cukur)
+summary(Mlme1) #es nezinu, ko ar šo darīt, vai tas vispār ir jēdzīgi/////:
+
+
+
+
+
+Mlmer1 <- glmer(Sugar ~  + (1 | fBeach),data=RIKZ,family=poisson())
 Mlmer2 <- glmer(Richness ~ NAP + (1+NAP | fBeach),data=RIKZ,family=poisson()) #jauktos efektus neatdala ar komatu, uzreiz pierakstām formulā, bet liekam iekavās
 Mlmer3 <- glmer(Richness ~ NAP + (NAP-1 | fBeach),data=RIKZ,family=poisson())
 
