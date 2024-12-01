@@ -8,6 +8,13 @@ Versiju kontrole GitHub.
 
 Darba uzdevumi:
 
+1. veikt normalitātes pārbaude - nebija normali
+2. viloksona testam paraugkopu salīdzēšana - 
+3. veikt korelācijas analīzi atbilstoši normalitātei
+4. izveidot lineārās regresijas modeli
+5. izveidot jaukta efekta modeli
+6. veikt datu vizualizāciju
+
 Problēmas: 
 1. kā lauka novietojums ietekmē cukura daudzumu, šķiedru daudzumu un ražas apjomu?
 
