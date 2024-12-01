@@ -60,17 +60,59 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Rezultāti:
 
-```{r}
-#šite rakstisim visu to murgu idk
-```
+## Korelācijas
+### Datu normalitātes pārbaude
 
+```{r, echo=FALSE}
+p1 <- ggplot(cukur, aes(sample = Tonn_Hect)) + geom_qq_band() +
+  stat_qq_point() + stat_qq_line() + labs(title = "tonnas")
+p2 <- ggplot(cukur, aes(sample = Fibre)) + geom_qq_band() +
+  stat_qq_point() + stat_qq_line() + labs(title = "Šķiedras")
+p3 <- ggplot(cukur, aes(sample = Sugar)) + geom_qq_band() +
+  stat_qq_point() + stat_qq_line() + labs(title = "Cukurs")
+plot_grid(p1, p2, p3, ncol=3)
+```
+Dati nav normāli sadalīti, tāpēc izmantojam neparametriskās korelācijas metodi : Spīrmena
+
+### Spīrmena korelācija starp vecumu un šķiedru daudzumu:
+
+```{r, echo=FALSE}
+cukur_atlasitie_kor = cukur %>%
+  select(Age, Fibre, Sugar, Tonn_Hect)
+
+mydata <- mtcars[, c(1,3,4,5,6,7)]
+require("corrplot")
+rquery.cormat(mydata, method = "spearman")
+warnings()
+korelacijas <- cukur_atlasitie_kor
+rquery.cormat(korelacijas)
+
+cor.test(cukur$Age, cukur$Fibre, method="spearman") 
+```
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un šķiedru daudzumu nav statistiski būtiskas korelācijas (S(1003)=159843313; p=0.0804), 
+p>0.0001
+
+### Spīrmena korelācija starp vecumu un cukura daudzumu:
+
+```{r, echo=FALSE}
+cor.test(cukur$Age, cukur$Sugar, method="spearman") 
+```
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un cukura daudzumu ir statistiski būtiska korelācija (S(1003) = 212937814;p < 0.0001). 
+Korelācijas koeficients rho -0.259 (vāja negatīva korelācija)
+
+### Spīrmena korelācija starp vecumu un ražu:
+
+```{r, echo=FALSE}
+cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
+```
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un ražas daudzumu nav statistiski būtiska korelācija (S(1003) = 1.71e+08; p = 0.7337); p>0.0001 
 
 
 Secinājumi:
 
 1.
-2.
-3.
+2. 
+3. 
 4.
 5.
 6.
