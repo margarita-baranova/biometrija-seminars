@@ -10,6 +10,14 @@ Darba uzdevumi:
 
 Hipotēzes:
 
+1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu
+2. Starp Cukurniedru lauka novietojumiem Austrālijas dienvidos vai ziemeļos ir novērojamas šķiedru daudzumu atšķirības 
+3. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē ražas apjomu
+#mošk apvienot vienā ^
+4.Starp cukurniedru vecumu un šķiedru daudzuma nav statistiski nozīmīgas korelācijas
+#šādi vairāk izklausās pēc secinājuma me dont like 
+5.
+
 Datu apraksts:
 
 Metodes:
