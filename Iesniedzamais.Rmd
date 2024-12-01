@@ -94,7 +94,15 @@ Savukārt Dienvidu (S) grupas dati novirzās no normālā sadalījuma.
 
 ```{r,  echo=FALSE}
 
-ggplot(cukur,aes(DistrictPosition,Sugar))+geom_boxplot()
+ggplot(cukur, aes(x = DistrictPosition, y = Sugar, fill = DistrictPosition)) +
+  geom_boxplot() +
+  labs(
+    title = "Cukura daudzuma salīdzinājums starp ziemeļu un dienvidu reģioniem",
+    x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+    y = "Cukurs (g/kg)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
 
 ```
 
@@ -150,7 +158,15 @@ QQ-plots: Dati neatbilst normālajam sadalījumam.
 
 ```{r,  echo=FALSE}
 
-ggplot(cukur,aes(DistrictPosition,Fibre))+geom_boxplot()
+ggplot(cukur, aes(x = DistrictPosition, y = Fibre, fill = DistrictPosition)) +
+  geom_boxplot() +
+  labs(
+    title = "Šķiedrvielu apjoma salīdzinājums starp ziemeļu un dienvidu reģioniem",
+    x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+    y = "Šķiedrvielas (g/kg)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
 
 ```
 
@@ -206,7 +222,15 @@ QQ-plots: Dati neatbilst normālajam sadalījumam.
 
 ```{r,  echo=FALSE}
 
-ggplot(cukur,aes(DistrictPosition,Tonn_Hect))+geom_boxplot()
+ggplot(cukur, aes(x = DistrictPosition, y = Tonn_Hect, fill = DistrictPosition)) +
+  geom_boxplot() +
+  labs(
+    title = "Ražas salīdzinājums starp ziemeļu un dienvidu reģioniem",
+    x = "Reģions (N = Ziemeļi, S = Dienvidi)",
+    y = "Raža (tonnas/hektārs)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
 
 ```
 
@@ -243,7 +267,7 @@ wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efek
 
 Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.142 standartnovirzes (95% CI 0.2...0.08).
 
-## Vizualizācija:
+
 
 #  Secinājumi:
 
