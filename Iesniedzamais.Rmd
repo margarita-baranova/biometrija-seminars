@@ -20,8 +20,22 @@ Faktori: augsnes tips, cukurniedru šķirne vai vecums, būtiski ietekmē cukurn
 
 Laukiem ar lielākām platībām būs lielākas cukurniedru ražas.
 
-Datu apraksts:
+#  Datu apraksts: šis vel tiks mainīts
 
+Datu failā ir informacija par 1005 cukurniedru laukiem.
+
+Faila kolonnas:
+1: DistrictPosition - lauka novietojums valsts dienvidos vai ziemeļos (Autralija)
+2: SoilName - augsnes tips
+3: Area - lauka lielums hektaros
+4: Variety - cukurniedru variatate
+5: Age - gadu skaits cik niedres ataudzetas pirms novaksanas
+6: HarvestMonth - razas novaksanas menesis
+7: HarvestDuration - razas novaksanas ilgums (dienas)
+8: Tonn_Hect - razas apjoms tonnas uz hektaru
+9: Fibre - skiedru daudzums (procentos)
+10: Sugar - cukuru daudzums (procentos)
+11:- jul_96-dec_97 - nokrisnu daudzums atbilstosaja menesi/gada
 
 #  Metodes:
 
@@ -30,11 +44,7 @@ Datu apraksts:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#  Rezultāti:
-## normalitātes pārbaude
-## lineārās regresijas modelis
-## jaukta efekta modelis
-
+## Bibliotēku ielāde
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
@@ -56,7 +66,7 @@ library(agricolae)
 })                             
 ```
 
-# Dati
+## Dati
 
 ```{r,  echo=FALSE}
 cukur<-read_excel("cukurniedres_dati.xlsx")
@@ -65,24 +75,8 @@ summary(cukur)
 str(cukur)
 ```
 
-
-Šaja failā ir informacija par 1005 cukurniedru laukiem.
-
-Faila kolonnas:
-1: DistrictPosition - lauka novietojums valsts dienvidos vai ziemeļos (Autralija)
-2: SoilName - augsnes tips
-3: Area - lauka lielums hektaros
-4: Variety - cukurniedru variatate
-5: Age - gadu skaits cik niedres ataudzetas pirms novaksanas
-6: HarvestMonth - razas novaksanas menesis
-7: HarvestDuration - razas novaksanas ilgums (dienas)
-8: Tonn_Hect - razas apjoms tonnas uz hektaru
-9: Fibre - skiedru daudzums (procentos)
-10: Sugar - cukuru daudzums (procentos)
-11:- jul_96-dec_97 - nokrisnu daudzums atbilstosaja menesi/gada
-
-
-# normalitātes novērtēšana un vilkoksona testi
+## Normalitātes pārbaude
+### Normalitātes vizualizācija (QQ-plots)
 
 ```{r,  echo=FALSE}
 ggplot(cukur, aes(sample = Sugar)) + facet_wrap(~DistrictPosition) +
@@ -90,10 +84,51 @@ ggplot(cukur, aes(sample = Sugar)) + facet_wrap(~DistrictPosition) +
   labs(x = "Teorētiskās kvantiles", y = "Paraugkopas kvantiles")
 
 
+```
+QQ-plots: Normāla sadalījuma pieņēmums, iespējams, ir derīgs tikai Ziemeļu (N) grupai, jo tās datu punkti QQ-plota diagrammā atrodas tuvu teorētiskajai līnijai.
+Savukārt Dienvidu (S) grupas dati novirzās no normālā sadalījuma.
+
+### Datu novērtējums ar Boxplot
+
+```{r,  echo=FALSE}
+
+ggplot(cukur,aes(DistrictPosition,Sugar))+geom_boxplot()
 
 ```
-Šī analīze norāda, ka, iespējams, normāla sadalījuma pieņēmums ir derīgs tikai Ziemeļu (N) grupai, bet ne Dienvidu (S) grupai.
 
+Boxplot analīze: Abās grupās ir redzamas ietekmīgās vērtības.
+
+Secinājums: Dati neatbilst normālam sadalījumam, tāpēc jāizmanto neparametriskās metodes, piemēram, Vilkoksona tests.
+
+### Vilkoksona tests divām neatkarīgām paraugkopām:
+
+```{r,  echo=FALSE}
+
+wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
+
+
+wilcox_test_result <- wilcox.test(Sugar ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
+-1/(exp(1)*2.2e-16*log(2.2e-16))
+
+
+```
+
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu un Dienvidu laukumiem cukurniedru ražas apjoma vērtību sadalījumiem pastāv statistiski būtiska atšķirība (W(1005)=195053 p<0.0001).
+
+Noteikta milzīga reizes atšķirība (4.638126e+13), , kas norāda, ka viena no grupām satur ievērojami vairāk cukura nekā otra.
+
+### Efekta lieluma novērtējums
+
+```{r,  echo=FALSE}
+
+
+wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE) 
+
+```
+
+Secinajums: novērotais efekta apjoms ir vidēji izteikts - videja starpıba ir 0.483, standartnovirzes (95% CI 0.53...0.43).
 
 #  Secinājumi:
 
