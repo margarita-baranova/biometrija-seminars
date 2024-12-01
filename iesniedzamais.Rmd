@@ -32,19 +32,22 @@ Hipotēzes:
 
 Datu apraksts:
 
-Šajā failā ir informacija par 1005 cukurniedru laukiem.
-Faila kolonnas:
-1. DistrictPosition - lauka novietojums valsts dienvidos vai ziemeļos (Autralija)
-2. SoilName - augsnes tips
-3. Area - lauka lielums hektaros
-4. Variety - cukurniedru variatate
-5. Age - gadu skaits cik niedres ataudzetas pirms novaksanas
-6. HarvestMonth - razas novaksanas menesis
-7. HarvestDuration - razas novaksanas ilgums (dienas)
-8. Tonn_Hect - razas apjoms tonnas uz hektaru
-9. Fibre - skiedru daudzums (procentos)
-10. Sugar - cukuru daudzums (procentos)
-11.- jul_96-dec_97 - nokrisnu daudzums atbilstosaja menesi/gada
+Šajā failā ir atrodama informācija par 1005 cukurniedru laukiem
+
+Dati:
+
+* DistrictPosition - lauka novietojums Austrālijas dienvidos vai ziemeļos
+* SoilName - augsnes tips
+* Area - lauka lielums hektaros
+* Variety - cukurniedru variatāte
+* Age - gadu skaits cik niedres ataudzetas pirms novākšanas
+* HarvestMonth - ražas novākšanas mēnesis
+* HarvestDuration - ražas novākšanas ilgums (dienas)
+* Tonn_Hect - ražas apjoms tonnas uz hektaru
+* Fibre - sķiedru daudzums (procentos)
+* Sugar - cukuru daudzums (procentos)
+* - jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
+
 
 Metodes:
 
