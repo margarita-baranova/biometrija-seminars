@@ -458,6 +458,26 @@ autoplot(CUKUR.pca2) #IZSKATĀS JAU CERĪGĀK
 
 autoplot(CUKUR.pca2, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 3) #JUST LOOK AT THIS CHONKER!!!!!!!!!! OR DEVIL IDK, YOU CHOOSE
 
+
+cukur_atlasitie_PCA3 = cukur %>%
+  select(Tonn_Hect, Fibre)
+
+CUKUR.pca3 <- prcomp(cukur_atlasitie_PCA3, scale. = TRUE)
+summary(CUKUR.pca3)
+
+
+autoplot(CUKUR.pca3) #nekam neder galīgi
+
+cukur_atlasitie_PCA4 = cukur %>%
+  select(Tonn_Hect, Sugar)
+
+CUKUR.pca4 <- prcomp(cukur_atlasitie_PCA4, scale. = TRUE)
+summary(CUKUR.pca4)
+
+
+autoplot(CUKUR.pca4) #nononoonononooooo
+
+
 #### RDA vai nez kas tas ir
 
 spe.hel <- decostand(spe, "hellinger")
@@ -484,6 +504,24 @@ summary(CUKUR.pca3)
 autoplot(CUKUR.pca3) #diezgan pašsaprotami, jo ir divi Z un D, tiem atbilstoši nokrišņi
 
 autoplot(CUKUR.pca3, loadings = TRUE, loadings.label = TRUE, label = TRUE, label.size = 6)
+
+
+#################
+#Krustkal tests #
+#################
+
+library(tidyverse)
+ 
+kruskal.test(Tonn_Hect ~ SoilName, data = cukur)
+
+install.packages("FSA")
+library(FSA)
+dunn_test(Tonn_Hect ~ SoilName, data = cukur)
+
+#nezinu, kas te notiek un vai kaut kas ir pareizi. Es pareizi saliku mainīgos?
+#Šo laikam nemaz nevar izmantot
+
+
 
 #korelācija (nesanāk)
 
