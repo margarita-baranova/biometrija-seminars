@@ -383,6 +383,9 @@ summary(model13) # nekas labs nav
 model14<- lm(Tonn_Hect~ Variety + Age, data=cukur)
 summary(model14) #fuflo
 
+model15 <- lm(Tonn_Hect ~ SoilName + Age + Variety, data = cukur)
+summary(model15) #nononononono
+
 
 
 # GLMER vai kas tas tāds
