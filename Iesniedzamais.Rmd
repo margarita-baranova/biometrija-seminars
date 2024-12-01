@@ -337,8 +337,7 @@ Regresijas modelis izskaidro tikai 7,6% no vērtību variēšanas, modelis kopum
 
 
 model3 <- lm(Tonn_Hect ~ SoilName*Age, data = cukur)
-summary(model3) #Ir statistiski būtisks, jo F(960;44)=3.011, p < 0.0001, Radj = 0.081, mediāna nobīdīta no nulles (-53.53), atmetam
-
+summary(model3) 
 
 ```
 
