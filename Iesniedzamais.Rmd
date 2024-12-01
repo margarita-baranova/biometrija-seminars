@@ -3,7 +3,8 @@ title: "Seminārs, datu kopa: cukurniedres"
 author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
 output: html_document
 ---
-Versiju kontrole GitHub...
+Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars)
+
 
 
 Darba uzdevumi:
@@ -75,8 +76,9 @@ summary(cukur)
 str(cukur)
 ```
 
-## Normalitātes pārbaude
-### Normalitātes vizualizācija (QQ-plots)
+
+## Cukura daudzums, ziemeļos vai dienvidos:
+### Normalitātes pārbaude (QQ-plots)
 
 ```{r,  echo=FALSE}
 ggplot(cukur, aes(sample = Sugar)) + facet_wrap(~DistrictPosition) +
@@ -128,7 +130,120 @@ wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE)
 
 ```
 
-Secinajums: novērotais efekta apjoms ir vidēji izteikts - videja starpıba ir 0.483, standartnovirzes (95% CI 0.53...0.43).
+Secinajums: novērotais efekta apjoms ir vidēji izteikts - videja starpıba ir 0.483 standartnovirzes (95% CI 0.53...0.43).
+
+## Šķiedru daudzums ziemeļos vai dienvidos:
+
+### Normalitātes pārbaude (QQ-plots)
+
+```{r,  echo=FALSE}
+ggplot(cukur, aes(sample = Fibre)) + facet_wrap(~DistrictPosition) +
+  geom_qq_band() + stat_qq_line() + stat_qq_point() +
+  labs(x = "Teorētiskās kvantiles", y = "Paraugkopas kvantiles") 
+
+
+```
+
+QQ-plots: Dati neatbilst normālajam sadalījumam.
+
+### Datu novērtējums ar Boxplot
+
+```{r,  echo=FALSE}
+
+ggplot(cukur,aes(DistrictPosition,Fibre))+geom_boxplot()
+
+```
+
+Boxplot analīze: Abās grupās ir redzamas ietekmīgās vērtības.
+
+Secinājums: Dati neatbilst normālam sadalījumam, tāpēc jāizmanto neparametriskās metodes, piemēram, Vilkoksona tests.
+
+### Vilkoksona tests divām neatkarīgām paraugkopām:
+
+```{r,  echo=FALSE}
+
+wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
+
+
+wilcox_test_result <- wilcox.test(Fibre ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
+-1/(exp(1)*0.01405*log(0.01405)) 
+
+
+```
+
+Vilkoksona testa rezultāti: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu (N) un Dienvidu (S) laukumiem cukurniedru šķiedrvielu (Fibre) vērtību sadalījumos pastāv statistiski būtiska atšķirība (W(1005)=113739W, p=0.01405). Atšķirība starp grupām nav tik izteikta kā cukura gadījumā.
+
+Relatīvā atšķirība: Noteikta neliela relatīvā atšķirība (6.14).
+
+
+### Efekta lieluma novērtējums
+
+```{r,  echo=FALSE}
+
+wilcox_effsize(data=cukur,Fibre~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.076, kas ir ļoti vājš efekts
+
+```
+
+Secinajums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.0775 standartnovirzes (95% CI 0.02...0.14).
+
+## Ražas apjoms (t/ha), ziemeļos vai dienvidos:
+
+### Normalitātes pārbaude (QQ-plots)
+
+```{r,  echo=FALSE}
+
+ggplot(cukur, aes(sample = Tonn_Hect)) + facet_wrap(~DistrictPosition) +
+  geom_qq_band() + stat_qq_line() + stat_qq_point() +
+  labs(x = "Teorētiskās kvantiles", y = "Paraugkopas kvantiles")
+
+```
+
+QQ-plots: Dati neatbilst normālajam sadalījumam.
+
+### Datu novērtējums ar Boxplot
+
+```{r,  echo=FALSE}
+
+ggplot(cukur,aes(DistrictPosition,Tonn_Hect))+geom_boxplot()
+
+```
+
+Boxplot analīze: Abās grupās ir redzamas ietekmīgās vērtības.
+
+Secinājums: Dati neatbilst normālam sadalījumam, tāpēc jāizmanto neparametriskās metodes, piemēram, Vilkoksona tests.
+
+### Vilkoksona tests divām neatkarīgām paraugkopām:
+
+```{r,  echo=FALSE}
+
+wilcox.test(cukur$Tonn_Hect ~ cukur$DistrictPosition)
+
+wilcox_test_result <- wilcox.test(Tonn_Hect ~ DistrictPosition, data = cukur)
+print(wilcox_test_result)
+
+-1/(exp(1)*7.126e-06*log(7.126e-06))
+
+
+```
+
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu un Dienvidu laukumiem cukurniedru ražas apjoma vērtību sadalījumiem pastāv statistiski būtiska atšķirība (W(1005) = 145532; p<0.0001).
+
+Noteikta liela reizes atšķirība (4356), kas norāda, ka viena no grupām ir ar ievērojami lielāku vidējo saražoto ražas daudzumu.
+
+### Efekta lieluma novērtējums
+
+```{r,  echo=FALSE}
+
+wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.142, kas ir vājš efekts
+
+
+```
+
+Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.142 standartnovirzes (95% CI 0.2...0.08).
+
+## Vizualizācija:
 
 #  Secinājumi:
 
