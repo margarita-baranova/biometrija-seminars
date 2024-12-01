@@ -8,12 +8,12 @@ Versiju kontrole GitHub.
 
 Darba uzdevumi:
 
-1. Veikt normalitātes pārbaudi - nebija normali
-2. Viloksona testam paraugkopu salīdzēšana - 
-3. Veikt korelācijas analīzi atbilstoši normalitātei
-4. Izveidot lineārās regresijas modeli
-5. Izveidot jaukta efekta modeli
-6. Veikt datu vizualizāciju 
+1. Veikt normalitātes pārbaudi.
+2. Veikt Viloksona testa paraugkopu salīdzināšanu.
+3. Veikt korelācijas analīzi atbilstoši normalitātei.
+4. Izveidot lineārās regresijas modeli.
+5. Izveidot jaukta efekta modeli.
+6. Veikt datu vizualizāciju.
 
 Problēmas: 
 
@@ -24,15 +24,15 @@ Problēmas:
 
 Hipotēzes:
 
-1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu, kā arī šķiedru daudzumu un ražas apjomu
-2. Cukurniedru šķiedru daudzums nav saistīts ar vecumu
-3. Cukurdienu cukura daudzums ir saistīts ar vecumu
-4. Cukurniedru ražas daudzums ir saistīts ar vecumu
+1. Cukurniedru lauka novietojums Austrālijas dienvidos vai ziemeļos atšķirīgi ietekmē cukura daudzumu, kā arī šķiedru daudzumu un ražas apjomu.
+2. Cukurniedru šķiedru daudzums nav saistīts ar vecumu.
+3. Cukurdienu cukura daudzums ir saistīts ar vecumu.
+4. Cukurniedru ražas daudzums ir saistīts ar vecumu.
 
 
 Datu apraksts:
 
-Šajā failā ir atrodama informācija par 1005 cukurniedru laukiem
+Šajā failā ir atrodama informācija par 1005 cukurniedru laukiem.
 
 Dati:
 
@@ -51,7 +51,7 @@ Dati:
 
 Metodes:
 
-izmantota kotrole GitHub 
+Izmantota kotrole GitHub.
 
 
 ```{r setup, include=FALSE}
@@ -67,6 +67,13 @@ Rezultāti:
 
 
 Secinājumi:
+
+1.
+2.
+3.
+4.
+5.
+6.
 
 
 Autoru ieguldījums:
