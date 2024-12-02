@@ -75,6 +75,12 @@ library(lindia)
 })
 ```
 
+```{r, echo=FALSE}
+cukur<-read_excel("cukurniedres_dati.xlsx")
+head(cukur)
+summary(cukur)
+str(cukur)
+```
 
 
 ```{r setup, include=FALSE}

@@ -196,7 +196,7 @@ cor.test(cukur$Age, cukur$Fibre, method="spearman")
 #(S(1003) = 159843313; p = 0.0804).
 
 ########################################################
-#Spīrmena korelācija starp vecumu un šķiedru daudzumu: #
+#Spīrmena korelācija starp vecumu un cukura daudzumu: #
 ########################################################
 
 
