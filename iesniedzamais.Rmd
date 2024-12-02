@@ -35,7 +35,7 @@ output: word_document
 
 
 
-#Metodes:
+# Metodes:
 
 Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars).
 
@@ -101,7 +101,7 @@ library(MuMIn)
 library(lme4)
 library(lmerTest)
 library(nlme)
-library(sjPlot)
+library(ggplot2)
   
 })
 ```
@@ -139,7 +139,7 @@ Dati:
 * jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
 
 
-#Rezultāti:
+# Rezultāti:
 
 ## Cukura daudzums, ziemeļos vai dienvidos:
 ### Normalitātes pārbaude (QQ-plots)
@@ -321,6 +321,8 @@ Secinājums: novērotais efekta apjoms ir vāji izteikts - vidēja starpība ir 
 ### Datu normalitātes pārbaude
 
 ```{r, echo=FALSE}
+library(cowplot)
+library(ggplot2)
 p1 <- ggplot(cukur, aes(sample = Tonn_Hect)) + geom_qq_band() +
   stat_qq_point() + stat_qq_line() + labs(title = "tonnas")
 p2 <- ggplot(cukur, aes(sample = Fibre)) + geom_qq_band() +
@@ -411,7 +413,7 @@ summary(model1)
 gg_diagnose(model1, ncol = 2)
 ```
 
-Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=29.22; p < 2.2e-16), bet Harvestmonth ietekme nav būtiska. .Pēc modeļa diagnostikas novērots, ka atlikumu vērtības nav normāli sadalītas, Cook's distance vertībās ir daudzas ietekmīgās vērtības.
+Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=29.22; p < 2.2e-16), bet Harvestmonth ietekme nav būtiska. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības nav normāli sadalītas, Cook's distance vertībās ir daudzas ietekmīgās vērtības.
 
 
 ```{r,  echo=FALSE}
@@ -488,7 +490,7 @@ print(AICc_values)
 
 Pēc AIC vertības  modelis 4.  ir labākais, jo šī modeļa AICc vertıba ir mazākā.
 
-*Modeļa raksturojums:*
+*Modeļa (model4) raksturojums:*
 
 Vairums augsnes tipu (piemēram, Buchan, Bulgun, Canoe, Galmara, Malbon, Mission, u.c.) parāda statistiski nozīmīgu ietekmi uz cukura daudzumu, kas liecina, ka augsnes veids var būt svarīgs faktors. Modelis kopumā izskaidro 32.14% cukura daudzuma variācijas.
 
@@ -563,15 +565,7 @@ MuMIn::AICc(modelis_lmer1,model_variety)
 
 Pēc AIC vertības vienkāršākais modelis (1. modelis) ir labāks, jo šī modeļa AICc vertība ir  mazāka nekā 2. modeļa.
 
-### Modeļa rezultātu tabula
-
-```{r,  echo=FALSE}
- 
-sjPlot:::knit_print.sjTable(modelis_lmer1)
-
-```
-
-*Modeļa raksturojums:*
+### Modeļa rezultātu raksturojums:
 
 Palielinot platību, raža palielinās par 86.46 tonnām/hektārā (CI: 83.08 – 89.85). Šī ir būtiska ietekme (p < 0.001).
 Palielinoties vecumam par vienu gadu, raža samazinās par 12.70 tonnām/hektārā (CI: -17.30 – -8.11). Šī ietekme ir būtiska (p < 0.001). Ar katru nākamo ražas mēnesi raža samazinās par 5.53 tonnām/hektārā (CI: -10.56 – -0.51). Ietekme ir mazāk būtiska, bet statistiski nozīmīga (p = 0.031).
@@ -585,7 +579,7 @@ Annija Tija Berņikova-Bondare: Conceptualization,Methodology,Validation, Formal
 
 Margarita Baranova:Conceptualization,Methodology,Validation, Formal analysis,Writing - Review & Editing, Visualization,Supervision,Project administration
 
-Katrīna Grebeško:Writing - Original Draft,
+Katrīna Grebeško:Writing - Original Draft, Writing - Review & Editing, Methodology
 
-Marta Zemīte:Writing - Original Draft,
+Marta Zemīte:Writing - Original Draft, Writing - Review & Editing, Methodology
 
