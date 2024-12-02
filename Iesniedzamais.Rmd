@@ -355,10 +355,48 @@ plot(model4)
 ```
 
 
-Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=20.95, p < 0.0001). Turklāt atsevišķu regresoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikasnovērots, ka atlikumu vērtības izskatās normāli sadalītas, Cook's distance vertıbas atbilstošas, taču ir dažas ietekmīgās vērtības.
+Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=20.95, p < 0.0001). Turklāt atsevišķu regresoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, Cook's distance vertıbas atbilstošas, taču ir dažas ietekmīgās vērtības.
+
+```{r,  echo=FALSE}
+
+model5 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
+summary(model5)
 
 
+```
+Regresijas modelis izskaidro tikai 2,65% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=2.19, p = 0.001). Taču atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
 
+```{r,  echo=FALSE}
+ 
+
+model6 <- lm(Sugar ~ SoilName * DistrictPosition, data = cukur) 
+summary(model6) 
+
+
+```
+
+Regresijas modelis izskaidro tikai 31,35% no vērtību variēšanas, modelis kopumā ir būtisks, taču daudz iztrūkstošo vērtību.
+
+```{r,  echo=FALSE}
+ 
+
+model7 <- lm(Sugar ~ SoilName + Variety, data = cukur)
+summary(model7) 
+
+```
+
+Regresijas modelis izskaidro tikai 32,45% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=12.48, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikas novērots, ka ir vairākas ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
+
+```{r,  echo=FALSE}
+ 
+
+cukur$prognoze <- predict(model7)
+cukur$atlikums <- resid(model7)
+ggplot(cukur, aes(prognoze, atlikums)) + geom_point()
+
+```
+
+Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), tačuu atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju.
 
 
 #  Secinājumi:
