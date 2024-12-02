@@ -63,6 +63,7 @@ Izmantota kotrole GitHub.
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## 
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
@@ -186,7 +187,7 @@ korelacijas <- cukur_atlasitie_kor
 source("https://www.sthda.com/upload/rquery_cormat.r")
 rquery.cormat(korelacijas)
 ```
-
+Nav atrasta spēcīga korelācija starp nevienu mainīgo pāri. Vājākais pozitīvais r ir starp Age (vecumu) un Fiber (šķiedru daudzumu) (0.041), un spēcīgākā negatīvā saistība ir starp Sugar (cukura daudzums) un Age (-0.27).
 
 
 
