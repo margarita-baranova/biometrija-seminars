@@ -87,12 +87,13 @@ cukurs_atlasitie = cukur %>%
 ### Normalitātes pārbaude (QQ-plots)
 
 ```{r,  echo=FALSE}
+
 ggplot(cukur, aes(sample = Sugar)) + facet_wrap(~DistrictPosition) +
   geom_qq_band() + stat_qq_line() + stat_qq_point() +
   labs(x = "Teorētiskās kvantiles", y = "Paraugkopas kvantiles")
 
-
 ```
+
 QQ-plots: Normāla sadalījuma pieņēmums, iespējams, ir derīgs tikai Ziemeļu (N) grupai, jo tās datu punkti QQ-plota diagrammā atrodas tuvu teorētiskajai līnijai.
 Savukārt Dienvidu (S) grupas dati novirzās no normālā sadalījuma.
 
@@ -128,7 +129,6 @@ print(wilcox_test_result)
 
 -1/(exp(1)*2.2e-16*log(2.2e-16))
 
-
 ```
 
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu un Dienvidu laukumiem cukurniedru ražas apjoma vērtību sadalījumiem pastāv statistiski būtiska atšķirība (W(1005)=195053 p<0.0001).
@@ -138,7 +138,6 @@ Noteikta milzīga reizes atšķirība (4.638126e+13), , kas norāda, ka viena no
 ### Efekta lieluma novērtējums
 
 ```{r,  echo=FALSE}
-
 
 wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE) 
 
@@ -154,7 +153,6 @@ Secinajums: novērotais efekta apjoms ir vidēji izteikts - videja starpıba ir 
 ggplot(cukur, aes(sample = Fibre)) + facet_wrap(~DistrictPosition) +
   geom_qq_band() + stat_qq_line() + stat_qq_point() +
   labs(x = "Teorētiskās kvantiles", y = "Paraugkopas kvantiles") 
-
 
 ```
 
@@ -255,7 +253,6 @@ print(wilcox_test_result)
 
 -1/(exp(1)*7.126e-06*log(7.126e-06))
 
-
 ```
 
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu un Dienvidu laukumiem cukurniedru ražas apjoma vērtību sadalījumiem pastāv statistiski būtiska atšķirība (W(1005) = 145532; p<0.0001).
@@ -268,7 +265,6 @@ Noteikta liela reizes atšķirība (4356), kas norāda, ka viena no grupām ir a
 
 wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.142, kas ir vājš efekts
 
-
 ```
 
 Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.142 standartnovirzes (95% CI 0.2...0.08).
@@ -276,20 +272,15 @@ Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0
 # Regresijas analīze:
 ```{r,  echo=FALSE}
 
-
 modelis_raza1 <- lm(formula = Tonn_Hect ~  Age + MonthName, data = cukurs_atlasitie)
 summary(modelis_raza1) #neņēmām, jo mediāna ļoti nobīdīta no nulles (-68.56) un Radj ir 0.0086
 gg_diagnose(modelis_raza1, ncol = 3) 
-
-
-
 
 ```
 
 Regresijas modelis izskaidro tikai 0.87 % no vērtību variācijas, modelis kopumā ir būtisks (F(2,1002)=2.463, p= 0.02275 ). Taču atsevišķu regresoru ietekme nav statistiski nozīmīga. Arī Kuka distances pārsniedz robežlīniju, atlikumu vērtības nav normāli sadalītas
 
 ```{r,  echo=FALSE}
-
 
 modelis_raza2 <- lm(formula = Tonn_Hect ~  Age + HarvestMonth, data = cukur)
 summary(modelis_raza2) #neņemam, jo mediāna ir vēl vairāk nobīdīta no nulles (-70.83) un Radj ir 0.00037
@@ -302,7 +293,6 @@ Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis k
 
 ```{r,  echo=FALSE}
 
-
 model <- lm(Tonn_Hect ~ Area + Age + HarvestMonth, data = cukur)
 summary(model)
 plot(model)
@@ -314,7 +304,6 @@ Regresijas modelis izskaidro 72,01% no vērtību variēšanas, modelis kopumā i
 
 ```{r,  echo=FALSE}
 
-
 model1 <- lm(Sugar ~ Area + Age + HarvestMonth, data = cukur)
 summary(model1) 
 
@@ -324,17 +313,14 @@ Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopum
 
 ```{r,  echo=FALSE}
 
-
 model2 <- lm(Tonn_Hect ~ SoilName + Age, data = cukur)
 summary(model2)
-
 
 ```
 
 Regresijas modelis izskaidro tikai 7,6% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=4.618, p < 0.0001). Atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
 
 ```{r,  echo=FALSE}
-
 
 model3 <- lm(Tonn_Hect ~ SoilName*Age, data = cukur)
 summary(model3) 
@@ -351,7 +337,6 @@ summary(model4)
 gg_diagnose(model4, ncol = 2) 
 
 
-
 ```
 
 
@@ -362,16 +347,13 @@ Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopu
 model5 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
 summary(model5)
 
-
 ```
 Regresijas modelis izskaidro tikai 2,65% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=2.19, p = 0.001). Taču atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
 
 ```{r,  echo=FALSE}
  
-
 model6 <- lm(Sugar ~ SoilName * DistrictPosition, data = cukur) 
 summary(model6) 
-
 
 ```
 
@@ -379,7 +361,6 @@ Regresijas modelis izskaidro tikai 31,35% no vērtību variēšanas, modelis kop
 
 ```{r,  echo=FALSE}
  
-
 model7 <- lm(Sugar ~ SoilName + Variety, data = cukur)
 summary(model7) 
 
@@ -389,7 +370,6 @@ Regresijas modelis izskaidro tikai 32,45% no vērtību variēšanas, modelis kop
 
 ```{r,  echo=FALSE}
  
-
 cukur$prognoze <- predict(model7)
 cukur$atlikums <- resid(model7)
 ggplot(cukur, aes(prognoze, atlikums)) + geom_point()
@@ -401,11 +381,8 @@ Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu 
 
 ```{r,  echo=FALSE}
  
-
 model8 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
 summary(model8)
-
-
 
 ```
 
@@ -413,8 +390,6 @@ Regresijas modelis izskaidro tikai 2,65% no vērtību variēšanas, modelis kopu
 
 ```{r,  echo=FALSE}
  
-
-
 model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
 summary(model9) 
 gg_diagnose(model9, ncol = 2)
@@ -486,8 +461,63 @@ library(lmerTest)
 library(nlme)
 })                             
 ```
-# GLMER
 
+### Jauktā modeļa (lmer) izveide un diagnostika
+
+```{r,  echo=FALSE}
+ 
+modelis_lmer1 <- lmer(Tonn_Hect ~ Area + Age + HarvestMonth + (1|SoilName), data = cukur)
+summary(modelis_lmer1)
+
+plot(modelis_lmer1)
+
+```
+modelis ir statistiski būtisks, residuals liecina, ka lielākā daļa vērtību koncentrējas ap nulli (mediāna = -0.0355).
+### Modeļa rezultātu tabula
+
+```{r,  echo=FALSE}
+ 
+sjPlot::tab_model(modelis_lmer1)
+
+```
+Palielinot platību, raža palielinās par 86.46 tonnām/hektārā (CI: 83.08 – 89.85). Šī ir būtiska ietekme (p < 0.001).
+Palielinoties vecumam par vienu gadu, raža samazinās par 12.70 tonnām/hektārā (CI: -17.30 – -8.11). Šī ietekme ir būtiska (p < 0.001). Ar katru nākamo ražas mēnesi raža samazinās par 5.53 tonnām/hektārā (CI: -10.56 – -0.51). Ietekme ir mazāk būtiska, bet statistiski nozīmīga (p = 0.031).
+
+### Grafiskais attēlojums
+```{r,  echo=FALSE}
+ 
+ggplot(cukur, aes(x = Area, y = Tonn_Hect)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Attiecība starp platību un ražu",
+    x = "Platība (Area)",                      
+    y = "Raža (Tonnas/Hektārs)"                
+  )
+
+```
+
+### pievienojot modelim mainīgo cukurniedru variatāti  (variety):
+
+```{r,  echo=FALSE}
+ 
+model_variety <- lmer(Tonn_Hect ~ Area + Age + HarvestMonth + (1|SoilName) + (1|Variety), data = cukur)
+summary(model_variety)
+
+sjPlot::tab_model(model_variety)
+
+
+```
+
+Fiksētie efekti izskaidro 70.5% no variācijas, Novērojama ļoti maza ietekme varietāte (1.776).
+#Jauktu efektu modeļu salīdzinājums:
+```{r,  echo=FALSE}
+ 
+MuMIn::AICc(modelis_lmer1,model_variety) 
+
+```
+
+Pec AIC vertıbas vienkāršākais modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka neka 2. modeļa.
 
 #  Secinājumi:
 
