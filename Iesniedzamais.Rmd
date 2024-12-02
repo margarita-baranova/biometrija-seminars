@@ -38,9 +38,46 @@ Faila kolonnas:
 11:- jul_96-dec_97 - nokrisnu daudzums atbilstosaja menesi/gada
 
 #  Metodes:
+**Metodes:**
 
 Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars).
-Datu normalitātes pārbaudei izmantoti QQ-ploti un Boxplot diagrammas. Datu analīzei veikti neparametriskie testi kā  Wilkoksona tests. Kā arī veikta regresijas analīze un datu vizualizācija.
+
+
+```{r setup-options, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Pakešu pievienošana
+
+No sākuma uzinstelētas un pievienotas paketes ar kuru palīdzību veicām nepieciešamās analīzes. Pievienošana darba sesijai veicām ar funkciju library().
+
+## Datu importēšana
+
+Excel faila datus par cukurniedrēm importējām, izmantojot paketi readxl un funkciju read_excel().
+
+## Normalitātes pārbaude
+
+Datu normalitātes pārbaudei izmantojām Kvantiļu diagrammmas un Vertıbamplitudu diagrammu.
+
+## Paraugkopu salīdzināšana
+
+Izmantotas neparametriskās metodes kā  Wilkoksona tests.
+
+## Korelācijas analīze 
+
+
+
+## Lineārā regresija
+
+Izmantota daudzfaktoru regresijas analzes funkcija lm(). Modeļu salīdzinājums veikts, izmantojot AICc kritēriju.
+
+## Jaukta efekta modeļi 
+
+Izmantota lineārā jaukto efektu modeļa izveide (lmer funkcija)
+
+## Datu vizualizācija
+
+
 
 
 ```{r setup, include=FALSE}
@@ -293,7 +330,7 @@ summary(modelis_raza2) #neņemam, jo mediāna ir vēl vairāk nobīdīta no null
 
 Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis kopumā nav būtisks (F(2,1002)=1.187, p= 0.3056 ). Turklāt atsevišķu regresoru ietekme nav statistiski nozīmīga.
 
-## Jaukta efekta modeļi
+
 ### Cukura daudzums kā atkarīgais mainīgais
 
 ```{r,  echo=FALSE}
