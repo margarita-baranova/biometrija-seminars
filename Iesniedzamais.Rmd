@@ -108,7 +108,7 @@ ggplot(cukur, aes(x = DistrictPosition, y = Sugar, fill = DistrictPosition)) +
   labs(
     title = "Cukura daudzuma salīdzinājums starp ziemeļu un dienvidu reģioniem",
     x = "Reģions (N = Ziemeļi, S = Dienvidi)",
-    y = "Cukurs (g/kg)"
+    y = "Cukura daudzums"
   ) +
   theme_minimal() +
   scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
@@ -169,7 +169,7 @@ ggplot(cukur, aes(x = DistrictPosition, y = Fibre, fill = DistrictPosition)) +
   labs(
     title = "Šķiedrvielu apjoma salīdzinājums starp ziemeļu un dienvidu reģioniem",
     x = "Reģions (N = Ziemeļi, S = Dienvidi)",
-    y = "Šķiedrvielas (g/kg)"
+    y = "Šķiedrvielas daudzums"
   ) +
   theme_minimal() +
   scale_fill_manual(values = c("N" = "lightblue", "S" = "lightgreen"))
@@ -356,7 +356,7 @@ qqPlot(residuals(model7))
 
 ```
 
-Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), tačuu atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
+Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), taču atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
 
 
 
@@ -415,13 +415,13 @@ AICc_model11 <- AICc(model11)
 AICc_model12 <- AICc(model12)
 AICc_model13 <- AICc(model13)
 
-# Salīdziniet AICc vērtības
+
 AICc_values <- data.frame(Model = c("Model1", "Model4", "Model6", "Model7", "Model9", "Model11", "Model12", "Model13"),
   AICc = c(AICc_model1, AICc_model4, AICc_model6, AICc_model7, AICc_model9, AICc_model11, AICc_model12, AICc_model13))
 print(AICc_values)
 
 ```
-Pēc AIC vertības  modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka nekā 2. modeļa.
+Pēc AIC vertības  modelis 9. modelis ir labākais, jo šı modeļa AICc vertıba ir mazākā.
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
