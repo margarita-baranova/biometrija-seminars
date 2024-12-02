@@ -16,7 +16,7 @@ Ir statistiski būtiska atšķirība cukura un šķiedru daudzumā starp  zieme�
  
 Starp cukurniedru vecumu un šķiedru un cukuru daudzumu pastāv statistiski būtiska korelācija.vai rakstīt vecākas niedres uzrādīs mazāku šķiedru un cukura daudzumu
 
-Faktori: augsnes tips, cukurniedru šķirne vai vecums, būtiski ietekmē cukurniedru ražu (tonnas/hektārs)
+Faktori: augsnes tips, cukurniedru šķirne vai vecums, būtiski ietekmē cukurniedru ražu (tonnas/hektārs).
 
 Laukiem ar lielākām platībām būs lielākas cukurniedru ražas.
 
