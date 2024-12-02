@@ -65,7 +65,7 @@ Izmantotas neparametriskās metodes kā  Wilkoksona tests.
 
 ## Korelācijas analīze 
 
-
+Korelacijas analızes veikšanai izmantotas funkcija cor.test() aprēķinot pēc Spīrmena metodes (method ="spearman"). Rezultātu novērtēšanai tika izmantota korelāciju matrica.
 
 ## Lineārā regresija
 
@@ -77,7 +77,7 @@ Izmantota lineārā jaukto efektu modeļa izveide (lmer funkcija). Modeļa rezul
 
 ## Datu vizualizācija
 
-
+Datu vizuālizācijai izmantotas paketes kā qqplotr(), cowplot(), tidyverse().
 
 
 ```{r setup, include=FALSE}
