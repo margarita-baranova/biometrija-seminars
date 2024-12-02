@@ -349,7 +349,7 @@ model4 <- lm(Sugar ~ SoilName + DistrictPosition, data = cukur)
 summary(model4)
 
 gg_diagnose(model4, ncol = 2) 
-plot(model4) 
+
 
 
 ```
@@ -393,10 +393,100 @@ Regresijas modelis izskaidro tikai 32,45% no vērtību variēšanas, modelis kop
 cukur$prognoze <- predict(model7)
 cukur$atlikums <- resid(model7)
 ggplot(cukur, aes(prognoze, atlikums)) + geom_point()
+qqPlot(residuals(model7))
 
 ```
 
-Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), tačuu atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju.
+Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), tačuu atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
+
+```{r,  echo=FALSE}
+ 
+
+model8 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
+summary(model8)
+
+
+
+```
+
+Regresijas modelis izskaidro tikai 2,65% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=2.19, p = 0.001). Taču atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
+
+```{r,  echo=FALSE}
+ 
+
+
+model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
+summary(model9) 
+gg_diagnose(model9, ncol = 2)
+
+```
+
+Regresijas modelis izskaidro tikai 18,34% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=6.369, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka ir vairākas ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
+
+```{r,  echo=FALSE}
+ 
+
+model10<- lm(Tonn_Hect ~ Variety + Age, data=cukur)
+summary(model10)
+
+gg_diagnose(model10, ncol = 2) 
+
+```
+
+Regresijas modelis izskaidro tikai 3.8% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=2.889, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības neizskatās normāli sadalītas (lielo vērtību astē), ir ietekmīgās vērtības.
+
+```{r,  echo=FALSE}
+ 
+model11<- lm(Sugar ~ Variety + Age, data=cukur) 
+summary(model11) 
+
+gg_diagnose(model11, ncol = 2)
+
+```
+
+Regresijas modelis izskaidro tikai 21.4% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=14.07, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, bet mazo vērtību galā ir nobīde, ir ietekmīgie novērojumi.
+
+```{r,  echo=FALSE}
+ 
+model12<- lm(Sugar ~ Variety, data=cukur)
+summary(model12) 
+gg_diagnose(model12, ncol = 2) 
+
+
+```
+
+Regresijas modelis izskaidro tikai 16.9% no vērtību variēšanas, modelis kopumā ir būtisks (F(984;20)=11.21, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, bet ir ietekmīgās vērtības.
+
+```{r,  echo=FALSE}
+ 
+model13<- lm(Fibre ~ Variety + Age, data=cukur) 
+summary(model13) 
+gg_diagnose(model13, ncol = 2)
+
+
+
+```
+
+Regresijas modelis izskaidro tikai 16.3% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=10.32, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, bet lielo vērtību galā ir novirze, kā arī ir ietekmīgās vērtības.
+
+```{r,  echo=FALSE}
+ 
+model14<- lm(Tonn_Hect~ Variety + Age, data=cukur) 
+summary(model14) 
+
+
+```
+
+Regresijas modelis izskaidro tikai 3.8% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=2.889, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas.
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages({
+library(lme4)
+library(lmerTest)
+library(nlme)
+})                             
+```
+# GLMER
 
 
 #  Secinājumi:
