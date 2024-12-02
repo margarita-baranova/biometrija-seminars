@@ -69,11 +69,11 @@ Izmantotas neparametriskās metodes kā  Wilkoksona tests.
 
 ## Lineārā regresija
 
-Izmantota daudzfaktoru regresijas analzes funkcija lm(). Modeļu salīdzinājums veikts, izmantojot AICc kritēriju.
+Izmantota daudzfaktoru regresijas analzes funkcija lm(). Modeļu salīdzinājums veikts, izmantojot AICc kritēriju.Modeļa rezultātu tabula tiek iegūta, izmantojot sjPlot::tab_model() funkciju
 
 ## Jaukta efekta modeļi 
 
-Izmantota lineārā jaukto efektu modeļa izveide (lmer funkcija)
+Izmantota lineārā jaukto efektu modeļa izveide (lmer funkcija). Modeļa rezultātu tabula tiek iegūta, izmantojot sjPlot::tab_model() funkciju.
 
 ## Datu vizualizācija
 
