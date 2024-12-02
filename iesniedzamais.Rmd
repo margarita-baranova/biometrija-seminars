@@ -34,6 +34,91 @@ output: word_document
 7. Cukurniedru cukura daudzums ir saistīts ar šķiedru daudzumu.
 
 
+
+#Metodes:
+
+Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars).
+
+
+```{r setup-options, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Pakešu pievienošana**
+
+Tika pievienotas paketes ar kuru palīdzību veicām nepieciešamās analīzes. Pievienošanu darba sesijai veicām ar funkciju library().
+
+**Datu importēšana**
+
+Excel faila datus par cukurniedrēm importējām, izmantojot paketi readxl un funkciju read_excel().
+
+**Normalitātes pārbaude**
+
+Datu normalitātes pārbaudei izmantojām Kvantiļu diagrammmas un Vērtībamplitūdu diagrammu.
+
+**Paraugkopu salīdzināšana**
+
+Izmantotas neparametriskās metodes kā Vilkoksona tests.
+
+**Korelācijas analīze** 
+
+Korelācijas analīzes veikšanai izmantotas funkcija cor.test() aprēķinot pēc Spīrmena metodes (method ="spearman"). Rezultātu novērtēšanai tika izmantota korelāciju matrica.
+
+**Lineārā regresija**
+
+Izmantota daudzfaktoru regresijas analīzes funkcija lm(). Modeļu salīdzinājums veikts, izmantojot AICc kritēriju. Modeļa rezultātu tabula tika iegūta, izmantojot sjPlot::tab_model() funkciju
+
+**Jaukta efekta modeļi** 
+
+ Izmantota  lmer funkcija , lai izveidotu lineāros jaukta efekta modeļus. Modeļa rezultātu tabula tika iegūta, izmantojot sjPlot::tab_model() funkciju.
+
+**Datu vizualizācija**
+
+Datu vizuālizācijai izmantotas paketes kā qqplotr(), cowplot(), tidyverse() un corrplot().
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Bibliotēku ielāde**
+
+```{r, echo=TRUE}
+suppressPackageStartupMessages({
+library(readxl)
+library(qqplotr)
+library(cowplot)
+library(ltm)
+library(tidyverse)
+library(Hmisc)
+library(EnvStats)
+library(rstatix)
+library(pwr)
+library(rcompanion)
+library(car)
+library(agricolae)
+library(lindia)
+library(MuMIn)
+library(lme4)
+library(lmerTest)
+library(nlme)
+library(sjPlot)
+  
+})
+```
+
+**Dati**
+
+```{r, echo=FALSE}
+cukur<-read_excel("cukurniedres_dati.xlsx")
+head(cukur)
+summary(cukur)
+str(cukur)
+
+cukurs_atlasitie = cukur %>%
+  mutate(MonthName = month.name[HarvestMonth]) %>% 
+  select(DistrictPosition, SoilName, Age, Area, Variety, Tonn_Hect, Fibre, Sugar, MonthName)
+```
+
 **Datu apraksts:**
 Darbā tika izmantoti dati par cukurniedrēm.
 
@@ -54,88 +139,7 @@ Dati:
 * jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
 
 
-**Metodes:**
-
-Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars).
-
-
-```{r setup-options, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Pakešu pievienošana
-
-No sākuma uzinstelētas un pievienotas paketes ar kuru palīdzību veicām nepieciešamās analīzes. Pievienošanu darba sesijai veicām ar funkciju library().
-
-## Datu importēšana
-
-Excel faila datus par cukurniedrēm importējām, izmantojot paketi readxl un funkciju read_excel().
-
-## Normalitātes pārbaude
-
-Datu normalitātes pārbaudei izmantojām Kvantiļu diagrammmas un Vertıbamplitudu diagrammu.
-
-## Paraugkopu salīdzināšana
-
-Izmantotas neparametriskās metodes kā  Wilkoksona tests.
-
-## Korelācijas analīze 
-
-Korelacijas analızes veikšanai izmantotas funkcija cor.test() aprēķinot pēc Spīrmena metodes (method ="spearman"). Rezultātu novērtēšanai tika izmantota korelāciju matrica.
-
-## Lineārā regresija
-
-Izmantota daudzfaktoru regresijas analzes funkcija lm(). Modeļu salīdzinājums veikts, izmantojot AICc kritēriju.Modeļa rezultātu tabula tiek iegūta, izmantojot sjPlot::tab_model() funkciju
-
-## Jaukta efekta modeļi 
-
-Izmantota lineārā jaukto efektu modeļa izveide (lmer funkcija). Modeļa rezultātu tabula tiek iegūta, izmantojot sjPlot::tab_model() funkciju.
-
-## Datu vizualizācija
-
-Datu vizuālizācijai izmantotas paketes kā qqplotr(), cowplot(), tidyverse().
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Bibliotēku ielāde
-
-```{r, echo=FALSE}
-suppressPackageStartupMessages({
-library(readxl)
-library(qqplotr)
-library(cowplot)
-library(ltm)
-library(tidyverse)
-library(Hmisc)
-library(EnvStats)
-library(rstatix)
-library(pwr)
-library(rcompanion)
-library(car)
-library(agricolae)
-library(lindia)
-library(MuMIn)
-  
-})
-```
-
-## Dati
-
-```{r, echo=FALSE}
-cukur<-read_excel("cukurniedres_dati.xlsx")
-head(cukur)
-summary(cukur)
-str(cukur)
-
-cukurs_atlasitie = cukur %>%
-  mutate(MonthName = month.name[HarvestMonth]) %>% 
-  select(DistrictPosition, SoilName, Age, Area, Variety, Tonn_Hect, Fibre, Sugar, MonthName)
-```
-
-
-**Rezultāti:**
+#Rezultāti:
 
 ## Cukura daudzums, ziemeļos vai dienvidos:
 ### Normalitātes pārbaude (QQ-plots)
@@ -178,16 +182,13 @@ Secinājums: Dati neatbilst normālam sadalījumam, tāpēc jāizmanto neparamet
 wilcox.test(cukur$Sugar ~ cukur$DistrictPosition)
 
 
-wilcox_test_result <- wilcox.test(Sugar ~ DistrictPosition, data = cukur)
-print(wilcox_test_result)
-
 -1/(exp(1)*2.2e-16*log(2.2e-16))
 
 ```
 
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu un Dienvidu laukumiem cukurniedru ražas apjoma vērtību sadalījumiem pastāv statistiski būtiska atšķirība (W(1005)=195053 p<0.0001).
 
-Noteikta milzīga reizes atšķirība (4.638126e+13), , kas norāda, ka viena no grupām satur ievērojami vairāk cukura nekā otra.
+Noteikta liela atšķirība (4.638126e+13),kas norāda, ka viena no grupām ir lielāks vidējā cukura daudzums.
 
 ### Efekta lieluma novērtējums
 
@@ -197,7 +198,7 @@ wilcox_effsize(data=cukur,Sugar~DistrictPosition,paired=FALSE,ci=TRUE)
 
 ```
 
-Secinajums: novērotais efekta apjoms ir vidēji izteikts - videja starpıba ir 0.483 standartnovirzes (95% CI 0.53...0.43).
+Secinājums: novērotais efekta apjoms ir vidēji izteikts - vidēja starpība ir 0.483 standartnovirzes (95% CI 0.53...0.43).
 
 ## Šķiedru daudzums ziemeļos vai dienvidos:
 
@@ -210,7 +211,7 @@ ggplot(cukur, aes(sample = Fibre)) + facet_wrap(~DistrictPosition) +
 
 ```
 
-QQ-plots: Dati neatbilst normālajam sadalījumam.
+QQ-plots: Dati neatbilst normālajam sadalījumam. Jāizmanto neparametriskās metodes.
 
 ### Datu novērtējums ar Boxplot
 
@@ -238,10 +239,6 @@ Secinājums: Dati neatbilst normālam sadalījumam, tāpēc jāizmanto neparamet
 
 wilcox.test(cukur$Fibre ~ cukur$DistrictPosition)
 
-
-wilcox_test_result <- wilcox.test(Fibre ~ DistrictPosition, data = cukur)
-print(wilcox_test_result)
-
 -1/(exp(1)*0.01405*log(0.01405)) 
 
 
@@ -256,11 +253,11 @@ Relatīvā atšķirība: Noteikta neliela relatīvā atšķirība (6.14).
 
 ```{r,  echo=FALSE}
 
-wilcox_effsize(data=cukur,Fibre~DistrictPosition,paired=FALSE,ci=TRUE) #efekta apjoms ir 0.076, kas ir ļoti vājš efekts
+wilcox_effsize(data=cukur,Fibre~DistrictPosition,paired=FALSE,ci=TRUE) 
 
 ```
 
-Secinajums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.0775 standartnovirzes (95% CI 0.02...0.14).
+Secinājums: novērotais efekta apjoms ir vāji izteikts - vidēja starpība ir 0.0775 standartnovirzes (95% CI 0.02...0.14).
 
 ## Ražas apjoms (t/ha), ziemeļos vai dienvidos:
 
@@ -274,7 +271,7 @@ ggplot(cukur, aes(sample = Tonn_Hect)) + facet_wrap(~DistrictPosition) +
 
 ```
 
-QQ-plots: Dati neatbilst normālajam sadalījumam.
+QQ-plots: Dati neatbilst normālajam sadalījumam.Jāizmanto neparametriskas metodes.
 
 ### Datu novērtējums ar Boxplot
 
@@ -302,16 +299,13 @@ Secinājums: Dati neatbilst normālam sadalījumam, tāpēc jāizmanto neparamet
 
 wilcox.test(cukur$Tonn_Hect ~ cukur$DistrictPosition)
 
-wilcox_test_result <- wilcox.test(Tonn_Hect ~ DistrictPosition, data = cukur)
-print(wilcox_test_result)
-
 -1/(exp(1)*7.126e-06*log(7.126e-06))
 
 ```
 
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp Ziemeļu un Dienvidu laukumiem cukurniedru ražas apjoma vērtību sadalījumiem pastāv statistiski būtiska atšķirība (W(1005) = 145532; p<0.0001).
 
-Noteikta liela reizes atšķirība (4356), kas norāda, ka viena no grupām ir ar ievērojami lielāku vidējo saražoto ražas daudzumu.
+Noteikta liela atšķirība (4356), kas norāda, ka viena no grupām ir ar ievērojami lielāku vidējo saražoto ražas daudzumu.
 
 ### Efekta lieluma novērtējums
 
@@ -321,7 +315,7 @@ wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efek
 
 ```
 
-Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.142 standartnovirzes (95% CI 0.2...0.08).
+Secinājums: novērotais efekta apjoms ir vāji izteikts - vidēja starpība ir 0.142 standartnovirzes (95% CI 0.2...0.08).
 
 ## Korelācijas
 ### Datu normalitātes pārbaude
@@ -336,7 +330,7 @@ p3 <- ggplot(cukur, aes(sample = Sugar)) + geom_qq_band() +
 plot_grid(p1, p2, p3, ncol=3)
 ```
 
-Dati nav normāli sadalīti, tāpēc izmantojam neparametriskās korelācijas metodi : Spīrmena
+Dati nav normāli sadalīti, tāpēc izmantojam neparametriskās korelācijas metodi : Spīrmena. Dati ir ārpus ticamības intervāla, ir izlecēji.
 
 ### Spīrmena korelācija starp vecumu un šķiedru daudzumu:
 
@@ -344,10 +338,9 @@ Dati nav normāli sadalīti, tāpēc izmantojam neparametriskās korelācijas me
 
 cor.test(cukur$Age, cukur$Fibre, method="spearman") 
 ```
-Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un šķiedru daudzumu nav statistiski būtiskas korelācijas (S(1003)=159843313; p=0.0804), 
-p>0.0001
+Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un šķiedru daudzumu nav statistiski būtiskas korelācijas (S(1003)=159843313; p=0.0804), p>0.0001.
 Korelācijas koeficients rho = 0.055, tātad vāja pozitīva korelācija.
-Šis liecina, ka cukurniedru vecums lielā mērā neietekmē šķidru daudzumu.
+Šis liecina, ka cukurniedru vecums lielā mērā neietekmē šķiedru daudzumu.
 
 
 ### Spīrmena korelācija starp vecumu un cukura daudzumu:
@@ -357,7 +350,7 @@ cor.test(cukur$Age, cukur$Sugar, method="spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un cukura daudzumu ir statistiski būtiska korelācija (S(1003) = 212937814;p < 0.0001). 
 Korelācijas koeficients rho -0.259, tātad vāja negatīva korelācija.
-šis liecina, ka cukurniedrēm novecojot, cukura daudzumam ir tendence nedaudz samazināties.
+Šis liecina, ka cukurniedrēm novecojot, cukura daudzumam ir tendence nedaudz samazināties.
 
 ### Spīrmena korelācija starp vecumu un ražu:
 
@@ -393,7 +386,7 @@ cor.test(cukur$Sugar, cukur$Fibre, method = "spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru cukura un šķiedru daudzuma ir statistiski būtiska atšķirība S(1003) = 191662599; p < 0.0001)
 Korelācijas koeficients rho = - 0.133, tātad ļoti vāja negatīva korelācija.
-Šis liecina, ka palielinoties cukura daudzumam, nedaudz samazinās šķiedru daudzums, bet saiastība ir vāja.
+Šis liecina, ka palielinoties cukura daudzumam, nedaudz samazinās šķiedru daudzums, bet saistība ir vāja.
 
 ### Korelāciju vizualizācija 
 
@@ -406,26 +399,7 @@ rquery.cormat(korelacijas)
 ```
 Nav atrasta spēcīga korelācija starp nevienu mainīgo pāri. Vājākais pozitīvais r ir starp Age (vecumu) un Fiber (šķiedru daudzumu) (0.041), un spēcīgākā negatīvā saistība ir starp Sugar (cukura daudzums) un Age (-0.27).
 
-# Regresijas analīze:
-
-```{r,  echo=FALSE}
-
-modelis_raza1 <- lm(formula = Tonn_Hect ~  Age + MonthName, data = cukurs_atlasitie)
-summary(modelis_raza1) #neņēmām, jo mediāna ļoti nobīdīta no nulles (-68.56) un Radj ir 0.0086
-gg_diagnose(modelis_raza1, ncol = 3) 
-
-```
-
-Regresijas modelis izskaidro tikai 0.87 % no vērtību variācijas, modelis kopumā ir būtisks (F(2,1002)=2.463, p= 0.02275 ). Taču atsevišķu regresoru ietekme nav statistiski nozīmīga. Arī Kuka distances pārsniedz robežlīniju, atlikumu vērtības nav normāli sadalītas
-
-```{r,  echo=FALSE}
-
-modelis_raza2 <- lm(formula = Tonn_Hect ~  Age + HarvestMonth, data = cukur)
-summary(modelis_raza2) #neņemam, jo mediāna ir vēl vairāk nobīdīta no nulles (-70.83) un Radj ir 0.00037
-
-```
-
-Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis kopumā nav būtisks (F(2,1002)=1.187, p= 0.3056 ). Turklāt atsevišķu regresoru ietekme nav statistiski nozīmīga.
+## Regresijas analīze:
 
 
 ### Cukura daudzums kā atkarīgais mainīgais
@@ -434,10 +408,10 @@ Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis k
 
 model1 <- lm(Sugar ~ Area + Age + HarvestMonth, data = cukur)
 summary(model1) 
-
+gg_diagnose(model1, ncol = 2)
 ```
 
-Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=29.22; p < 2.2e-16), bet Harvestmonth ietekme nav būtiska. 
+Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=29.22; p < 2.2e-16), bet Harvestmonth ietekme nav būtiska. .Pēc modeļa diagnostikas novērots, ka atlikumu vērtības nav normāli sadalītas, Cook's distance vertībās ir daudzas ietekmīgās vērtības.
 
 
 ```{r,  echo=FALSE}
@@ -458,29 +432,21 @@ Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopu
 model6 <- lm(Sugar ~ SoilName * DistrictPosition, data = cukur) 
 summary(model6) 
 
+gg_diagnose(model6, ncol = 2) 
 ```
 
-Regresijas modelis izskaidro tikai 31,35% no vērtību variēšanas, modelis kopumā ir būtisks, taču daudz iztrūkstošo vērtību.
+Regresijas modelis izskaidro tikai 31,35% no vērtību variēšanas, modelis kopumā ir būtisks, taču daudz iztrūkstošo vērtību.Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, Cook's distance vertıbas atbilstošas, taču ir dažas ietekmīgās vērtības.
 
 ```{r,  echo=FALSE}
  
 model7 <- lm(Sugar ~ SoilName + Variety, data = cukur)
 summary(model7) 
 
+gg_diagnose(model7, ncol = 2)
 ```
 
-Regresijas modelis izskaidro tikai 32,45% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=12.48, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikas novērots, ka ir vairākas ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
+Regresijas modelis izskaidro tikai 32,45% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=12.48, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikas novērots, ka ir pāris ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
 
-```{r,  echo=FALSE}
- 
-cukur$prognoze <- predict(model7)
-cukur$atlikums <- resid(model7)
-ggplot(cukur, aes(prognoze, atlikums)) + geom_point()
-qqPlot(residuals(model7))
-
-```
-
-Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), taču atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
 
 ```{r,  echo=FALSE}
  
@@ -522,12 +488,6 @@ print(AICc_values)
 
 Pēc AIC vertības  modelis 4.  ir labākais, jo šī modeļa AICc vertıba ir mazākā.
 
-```{r,  echo=FALSE}
- 
-sjPlot::tab_model(model4)
-
-```
-
 *Modeļa raksturojums:*
 
 Vairums augsnes tipu (piemēram, Buchan, Bulgun, Canoe, Galmara, Malbon, Mission, u.c.) parāda statistiski nozīmīgu ietekmi uz cukura daudzumu, kas liecina, ka augsnes veids var būt svarīgs faktors. Modelis kopumā izskaidro 32.14% cukura daudzuma variācijas.
@@ -563,24 +523,10 @@ MuMIn::AICc(model9, model12, model13)
 
 Pēc AIC vertības  modelis 9. ir labākais, jo šı modeļa AICc vertıba ir mazākā.
 
-```{r,  echo=FALSE}
- 
-sjPlot::tab_model(model9)
-
-```
-
 *Modeļa raksturojums:*
 
 Dažām augsnēm, piemēram, Galmara, Inlet un Silkwood, ir statistiski nozīmīga ietekme uz šķiedrvielu daudzumu, taču vairums augšņu kā arī šķirņu nav statistiski nozīmīgas šajā modelī. Modelis izskaidro tikai nelielu daļu šķiedrvielu daudzuma variācijas (18.3%), kas norāda, ka ir citi svarīgi faktori, kas nav iekļauti šajā modelī.
 
-
-```{r, echo=FALSE}
-suppressPackageStartupMessages({
-library(lme4)
-library(lmerTest)
-library(nlme)
-})                             
-```
 
 ### Jauktā modeļa (lmer) izveide un diagnostika
 
@@ -595,19 +541,17 @@ plot(modelis_lmer1)
 
 Modelis ir statistiski būtisks, residuals liecina, ka lielākā daļa vērtību koncentrējas ap nulli (mediāna = -0.0355).
 
-### Pievienojot modelim mainīgo cukurniedru variatāti  (variety):
+### Pievienojot modelim mainīgo cukurniedru varietāti  (variety):
 
 ```{r,  echo=FALSE}
  
 model_variety <- lmer(Tonn_Hect ~ Area + Age + HarvestMonth + (1|SoilName) + (1|Variety), data = cukur)
 summary(model_variety)
 
-sjPlot::tab_model(model_variety)
-
-
+plot(model_variety)
 ```
 
-Fiksētie efekti izskaidro 70.5% no variācijas, Novērojama ļoti maza ietekme varietāte (1.776).
+Fiksētie efekti izskaidro 70.5% no variācijas, Novērojama ļoti maza ietekme varietātei (1.776).
 
 #Jauktu efektu modeļu salīdzinājums:
 
@@ -617,13 +561,13 @@ MuMIn::AICc(modelis_lmer1,model_variety)
 
 ```
 
-Pec AIC vertıbas vienkāršākais modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka nekā 2. modeļa.
+Pēc AIC vertības vienkāršākais modelis (1. modelis) ir labāks, jo šī modeļa AICc vertība ir  mazāka nekā 2. modeļa.
 
 ### Modeļa rezultātu tabula
 
 ```{r,  echo=FALSE}
  
-sjPlot::tab_model(modelis_lmer1)
+sjPlot:::knit_print.sjTable(modelis_lmer1)
 
 ```
 
@@ -632,16 +576,7 @@ sjPlot::tab_model(modelis_lmer1)
 Palielinot platību, raža palielinās par 86.46 tonnām/hektārā (CI: 83.08 – 89.85). Šī ir būtiska ietekme (p < 0.001).
 Palielinoties vecumam par vienu gadu, raža samazinās par 12.70 tonnām/hektārā (CI: -17.30 – -8.11). Šī ietekme ir būtiska (p < 0.001). Ar katru nākamo ražas mēnesi raža samazinās par 5.53 tonnām/hektārā (CI: -10.56 – -0.51). Ietekme ir mazāk būtiska, bet statistiski nozīmīga (p = 0.031).
 
-**Secinājumi:**
-
-1. Ziemeļos cukura daudzums un ražas apjoms ir ievērojami augstāks nekā Dienvidos, taču šķiedru daudzums starp reģioniem atšķiras mazāk. Atšķirības starp reģioniem ir statistiski nozīmīgas, bet efekta lielumi liecina, ka šīs atšķirības nav ļoti izteiktas.
-
-2. Augsnes veids (SoilName) ir viens no svarīgākajiem faktoriem cukura un šķiedru daudzuma variācijā. Platība (Area) ir svarīgs faktors ražas prognozēšanā, kas apstiprināts jauktajā efektu modelī.
-
-3. 
-4.
-5.
-6.
+Secinājumi:Augsnes veids (SoilName) ir viens no svarīgākajiem faktoriem cukura un šķiedru daudzuma variācijā. Platība (Area) ir svarīgs faktors ražas prognozēšanā, kas apstiprināts jauktajā efektu modelī.
 
 
 **Autoru ieguldījums:**
