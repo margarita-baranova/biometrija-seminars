@@ -3,17 +3,15 @@ title: "Seminārs, datu kopa: cukurniedres"
 author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
 output: word_document
 ---
-Versiju kontrole GitHub.
-
 
 **Darba uzdevumi:**
 
-1. Veikt normalitātes pārbaudi.
-2. Veikt Viloksona testa paraugkopu salīdzināšanu.
+1. Veikt datu normalitātes pārbaudi.
+2. Veikt paraugkopu salīdzināšanu pēc atbilstošas metodes.
 3. Veikt korelācijas analīzi atbilstoši normalitātei.
-4. Izveidot lineārās regresijas modeli.
-5. Izveidot jaukta efekta modeli.
-6. Veikt datu vizualizāciju.
+4. Izveidot lineārās regresijas modeļus.
+5. Izveidot jaukta efekta modeļus.
+6. Veikt datu vizualizāciju un interpretāciju.
 
 **Problēmas:**
 
@@ -31,8 +29,9 @@ Versiju kontrole GitHub.
 
 
 **Datu apraksts:**
+Darbā tika izmantoti dati par cukurniedrēm.
 
-Šajā failā ir atrodama informācija par 1005 cukurniedru laukiem.
+Datu kopā ir atrodama informācija par 1005 cukurniedru laukiem.
 
 Dati:
 
@@ -46,12 +45,18 @@ Dati:
 * Tonn_Hect - ražas apjoms tonnas uz hektaru
 * Fibre - sķiedru daudzums (procentos)
 * Sugar - cukuru daudzums (procentos)
-* - jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
+* jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
 
 
 **Metodes:**
 
 Izmantota kotrole GitHub.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
@@ -71,15 +76,14 @@ library(rcompanion)
 library(car)
 library(agricolae)
 library(lindia)
+library(corrplot)
   
 })
 ```
-
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r,echo=FALSE}
+cukur<-read_excel("cukurniedres_dati.xlsx")
 ```
+
 
 **Rezultāti:**
 
@@ -95,20 +99,12 @@ p3 <- ggplot(cukur, aes(sample = Sugar)) + geom_qq_band() +
   stat_qq_point() + stat_qq_line() + labs(title = "Cukurs")
 plot_grid(p1, p2, p3, ncol=3)
 ```
+
 Dati nav normāli sadalīti, tāpēc izmantojam neparametriskās korelācijas metodi : Spīrmena
 
 ### Spīrmena korelācija starp vecumu un šķiedru daudzumu:
 
 ```{r, echo=FALSE}
-cukur_atlasitie_kor = cukur %>%
-  select(Age, Fibre, Sugar, Tonn_Hect)
-
-mydata <- mtcars[, c(1,3,4,5,6,7)]
-require("corrplot")
-rquery.cormat(mydata, method = "spearman")
-warnings()
-korelacijas <- cukur_atlasitie_kor
-rquery.cormat(korelacijas)
 
 cor.test(cukur$Age, cukur$Fibre, method="spearman") 
 ```
@@ -156,7 +152,10 @@ rho = - 0.133 (ļoti vāja negatīva korelācija)
 
 ### Korelāciju vizualizācija 
 ```{r, echo=FALSE}
+cukur_atlasitie_kor = cukur %>%
+  select(Age, Fibre, Sugar, Tonn_Hect)
 korelacijas <- cukur_atlasitie_kor
+source("https://www.sthda.com/upload/rquery_cormat.r")
 rquery.cormat(korelacijas)
 ```
 
