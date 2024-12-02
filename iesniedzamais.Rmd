@@ -65,7 +65,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Pakešu pievienošana
 
-No sākuma uzinstelētas un pievienotas paketes ar kuru palīdzību veicām nepieciešamās analīzes. Pievienošana darba sesijai veicām ar funkciju library().
+No sākuma uzinstelētas un pievienotas paketes ar kuru palīdzību veicām nepieciešamās analīzes. Pievienošanu darba sesijai veicām ar funkciju library().
 
 ## Datu importēšana
 
@@ -73,11 +73,11 @@ Excel faila datus par cukurniedrēm importējām, izmantojot paketi readxl un fu
 
 ## Normalitātes pārbaude
 
-Datu normalitātes pārbaudei izmantojām QQ-plotus un Boxplot diagrammas.
+Datu normalitātes pārbaudei izmantojām QQ-plotus un Boxplot diagrammas...
 
 ## Korelācijas analīze 
 
-
+Datu korelācijas analīzes veikšanai izmantojām funkciju cor.test()....
 
 ## Lineārā regresija
 
