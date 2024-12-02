@@ -272,6 +272,7 @@ wilcox_effsize(data=cukur,Tonn_Hect~DistrictPosition,paired=FALSE,ci=TRUE) #efek
 Secinājums: novērotais efekta apjoms ir vāji izteikts - videja starpıba ir 0.142 standartnovirzes (95% CI 0.2...0.08).
 
 # Regresijas analīze:
+
 ```{r,  echo=FALSE}
 
 modelis_raza1 <- lm(formula = Tonn_Hect ~  Age + MonthName, data = cukurs_atlasitie)
@@ -292,17 +293,7 @@ summary(modelis_raza2) #neņemam, jo mediāna ir vēl vairāk nobīdīta no null
 Regresijas modelis izskaidro tikai 0.03 % no vērtību variācijas, un modelis kopumā nav būtisks (F(2,1002)=1.187, p= 0.3056 ). Turklāt atsevišķu regresoru ietekme nav statistiski nozīmīga.
 
 ## Jaukta efekta modeļi
-
-```{r,  echo=FALSE}
-
-model <- lm(Tonn_Hect ~ Area + Age + HarvestMonth, data = cukur)
-summary(model)
-plot(model)
-
-```
-
-Regresijas modelis izskaidro 72,01% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=862,2; p < 2.2e-16), atsevišķu regresoru ietekmes ir būtiskas. Taču atlikuma vērtības nav normāli sadalītas.
-
+### Cukura daudzums kā atkarīgais mainīgais
 
 ```{r,  echo=FALSE}
 
@@ -381,6 +372,26 @@ Regresijas modelis izskaidro tikai 16.9% no vērtību variēšanas, modelis kopu
 
 ```{r,  echo=FALSE}
  
+AICc_model1 <- AICc(model1)
+AICc_model4 <- AICc(model4)
+AICc_model6 <- AICc(model6)
+AICc_model7 <- AICc(model7)
+AICc_model11 <- AICc(model11)
+
+
+AICc_values <- data.frame(Model = c("Model1", "Model4", "Model6", "Model7", "Model11"),
+                          AICc = c(AICc_model1, AICc_model4, AICc_model6, AICc_model7, AICc_model11))
+
+print(AICc_values)
+
+```
+
+Pēc AIC vertības  modelis 4.  ir labākais, jo šī modeļa AICc vertıba ir mazākā.
+
+### Šķiedru daudzums kā atkarīgais mainīgais:
+
+```{r,  echo=FALSE}
+ 
 model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
 summary(model9) 
 gg_diagnose(model9, ncol = 2)
@@ -406,25 +417,9 @@ MuMIn::AICc(model9, model12, model13)
 
 ```
 
-Pēc AIC vertības  modelis 9. modelis ir labākais, jo šı modeļa AICc vertıba ir mazākā.
-
-```{r,  echo=FALSE}
- 
-AICc_model1 <- AICc(model1)
-AICc_model4 <- AICc(model4)
-AICc_model6 <- AICc(model6)
-AICc_model7 <- AICc(model7)
-AICc_model11 <- AICc(model11)
+Pēc AIC vertības  modelis 9. ir labākais, jo šı modeļa AICc vertıba ir mazākā.
 
 
-AICc_values <- data.frame(Model = c("Model1", "Model4", "Model6", "Model7", "Model11"),
-                          AICc = c(AICc_model1, AICc_model4, AICc_model6, AICc_model7, AICc_model11))
-
-print(AICc_values)
-
-```
-
-Pēc AIC vertības  modelis 4. modelis ir labākais, jo šī modeļa AICc vertıba ir mazākā.
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
