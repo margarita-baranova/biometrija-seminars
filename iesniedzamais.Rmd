@@ -3,17 +3,15 @@ title: "Seminārs, datu kopa: cukurniedres"
 author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
 output: word_document
 ---
-Versiju kontrole GitHub.
-
 
 **Darba uzdevumi:**
 
-1. Veikt normalitātes pārbaudi.
-2. Veikt Viloksona testa paraugkopu salīdzināšanu.
+1. Veikt datu normalitātes pārbaudi.
+2. Veikt paraugkopu salīdzināšanu pēc atbilstošas metodes.
 3. Veikt korelācijas analīzi atbilstoši normalitātei.
-4. Izveidot lineārās regresijas modeli.
-5. Izveidot jaukta efekta modeli.
-6. Veikt datu vizualizāciju.
+4. Izveidot lineārās regresijas modeļus.
+5. Izveidot jaukta efekta modeļus.
+6. Veikt datu vizualizāciju un interpretāciju.
 
 **Problēmas:**
 
@@ -21,6 +19,9 @@ Versiju kontrole GitHub.
 2. Vai ir saistība starp cukurniedru vecumu un šķiedru daudzumu?
 3. Vai ir saistība strap cukurniedru vecumu un cukura daudzumu?
 4. Vai ir sastība starp cukurniedru vecumu un ražu?
+5. Vai ir saistība starp cukurniedu ražas un šķiedru daudzumu?
+6. Vai ir saistība starp cukurniedu ražas un cukura daudzumu?
+7. Vai ir saistība starp cukurniedu cukura un šķidru daudzumu?
 
 **Hipotēzes:**
 
@@ -28,11 +29,15 @@ Versiju kontrole GitHub.
 2. Cukurniedru šķiedru daudzums nav saistīts ar vecumu.
 3. Cukurdienu cukura daudzums ir saistīts ar vecumu.
 4. Cukurniedru ražas daudzums ir saistīts ar vecumu.
+5. Cukurniedu ražas daudzums ir saiatīts ar šķiedru daudzumu.
+6. Cikurniedru ražas daudzums ir saistīts ar cukura daudzumu.
+7. Cukurniedru cukura daudzums ir saistīts ar šķiedru daudzumu.
 
 
 **Datu apraksts:**
+Darbā tika izmantoti dati par cukurniedrēm.
 
-Šajā failā ir atrodama informācija par 1005 cukurniedru laukiem.
+Datu kopā ir atrodama informācija par 1005 cukurniedru laukiem.
 
 Dati:
 
@@ -46,12 +51,18 @@ Dati:
 * Tonn_Hect - ražas apjoms tonnas uz hektaru
 * Fibre - sķiedru daudzums (procentos)
 * Sugar - cukuru daudzums (procentos)
-* - jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
+* jul_96-dec_97 - nokrišņu daudzums atbilstošajā mēnesī/gadā
 
 
 **Metodes:**
 
 Izmantota kotrole GitHub.
+
+
+```{r setup-options, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
@@ -61,8 +72,6 @@ library(ggplot2)
 library(cowplot)
 library(ltm)
 library(tidyverse)
-library(qqplotr)
-library(readxl)
 library(Hmisc)
 library(EnvStats)
 library(rstatix)
@@ -71,9 +80,11 @@ library(rcompanion)
 library(car)
 library(agricolae)
 library(lindia)
+library(corrplot)
   
 })
 ```
+
 
 ```{r, echo=FALSE}
 cukur<-read_excel("cukurniedres_dati.xlsx")
@@ -86,6 +97,12 @@ str(cukur)
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+```{r, echo=FALSE}
+cukur<-read_excel("cukurniedres_dati.xlsx")
+```
+
 
 **Rezultāti:**
 
@@ -101,25 +118,20 @@ p3 <- ggplot(cukur, aes(sample = Sugar)) + geom_qq_band() +
   stat_qq_point() + stat_qq_line() + labs(title = "Cukurs")
 plot_grid(p1, p2, p3, ncol=3)
 ```
+
 Dati nav normāli sadalīti, tāpēc izmantojam neparametriskās korelācijas metodi : Spīrmena
 
 ### Spīrmena korelācija starp vecumu un šķiedru daudzumu:
 
 ```{r, echo=FALSE}
-cukur_atlasitie_kor = cukur %>%
-  select(Age, Fibre, Sugar, Tonn_Hect)
-
-mydata <- mtcars[, c(1,3,4,5,6,7)]
-require("corrplot")
-rquery.cormat(mydata, method = "spearman")
-warnings()
-korelacijas <- cukur_atlasitie_kor
-rquery.cormat(korelacijas)
 
 cor.test(cukur$Age, cukur$Fibre, method="spearman") 
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un šķiedru daudzumu nav statistiski būtiskas korelācijas (S(1003)=159843313; p=0.0804), 
 p>0.0001
+Korelācijas koeficients rho = 0.055, tātad vāja pozitīva korelācija.
+Šis liecina, ka cukurniedru vecums lielā mērā neietekmē šķidru daudzumu.
+
 
 ### Spīrmena korelācija starp vecumu un cukura daudzumu:
 
@@ -127,7 +139,8 @@ p>0.0001
 cor.test(cukur$Age, cukur$Sugar, method="spearman") 
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un cukura daudzumu ir statistiski būtiska korelācija (S(1003) = 212937814;p < 0.0001). 
-Korelācijas koeficients rho -0.259 (vāja negatīva korelācija)
+Korelācijas koeficients rho -0.259, tātad vāja negatīva korelācija.
+šis liecina, ka cukurniedrēm novecojot, cukura daudzumam ir tendence nedaudz samazināties.
 
 ### Spīrmena korelācija starp vecumu un ražu:
 
@@ -135,6 +148,8 @@ Korelācijas koeficients rho -0.259 (vāja negatīva korelācija)
 cor.test(cukur$Age, cukur$Tonn_Hect, method="spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un ražas daudzumu nav statistiski būtiska korelācija (S(1003) = 1.71e+08; p = 0.7337); p>0.0001 
+Korelācijas koeficients rho = -0.011, tātad vāja negatīva korelācija.
+Šis liecina, ka cukurniedru vecums neietekmē ražas daudzumu.
 
 ### Spīrmena korelācija starp ražas un šķiedru daudzumu:
 
@@ -142,7 +157,8 @@ Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru augu vecumu un r
 cor.test(cukur$Tonn_Hect, cukur$Fibre, method = "spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru ražas un šķiedru daudzuma ir statistiski būtiska korelācija (S(1003) = 189086479; p = 0.000185); p < 0.0001.
-rho = - 0.118 (ļoti vāja negatīva korelācija)
+Korelācijas koeficients rho = - 0.118, tātad ļoti vāja negatīva korelācija.
+Šis liecina, ka palielinoties cukurniedru ražai, nedaudz samazinās šķiedru daudzums, bet vājās korelācijas dēļ saistība nav spēcīga.
 
 ### Spīrmena korelācija starp ražas un cukura daudzumu:
 
@@ -150,7 +166,8 @@ rho = - 0.118 (ļoti vāja negatīva korelācija)
 cor.test(cukur$Tonn_Hect, cukur$Sugar, method = "spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru ražas un cukura daudzuma ir statistiski būtiska korelācija (S(1003) = 147440361; p < 0.0001)
-rho = 0.128 (ļoti vāja pozitīva korelācija)
+Korelācijas koeficients rho = 0.128, ļoti vāja pozitīva korelācija.
+Šis liecina, ka palielinoties ražas daudzumam, palielinās arī cukura daudzums.
 
 ### Spīrmena korelācija starp cukura un šķiedru daudzumu:
 
@@ -158,13 +175,18 @@ rho = 0.128 (ļoti vāja pozitīva korelācija)
 cor.test(cukur$Sugar, cukur$Fibre, method = "spearman")
 ```
 Secinājums: Pie būtiskuma līmeņa α=0.05, starp cukurniedru cukura un šķiedru daudzuma ir statistiski būtiska atšķirība S(1003) = 191662599; p < 0.0001)
-rho = - 0.133 (ļoti vāja negatīva korelācija)
+Korelācijas koeficients rho = - 0.133, tātad ļoti vāja negatīva korelācija.
+Šis liecina, ka palielinoties cukura daudzumam, nedaudz samazinās šķiedru daudzums, bet saiastība ir vāja.
 
 ### Korelāciju vizualizācija 
 ```{r, echo=FALSE}
+cukur_atlasitie_kor = cukur %>%
+  select(Age, Fibre, Sugar, Tonn_Hect)
 korelacijas <- cukur_atlasitie_kor
+source("https://www.sthda.com/upload/rquery_cormat.r")
 rquery.cormat(korelacijas)
 ```
+
 
 
 
@@ -187,5 +209,4 @@ Margarita Baranova:Conceptualization,Methodology,Validation, Formal analysis,Wri
 Katrīna Grebeško:Writing - Original Draft,
 
 Marta Zemīte:Writing - Original Draft,
-
 
