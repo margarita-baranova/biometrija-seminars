@@ -3,9 +3,8 @@ title: "Seminārs, datu kopa: cukurniedres"
 author: "Annija Tija Berņikova-Bondare, Marta Zemīte, Katrīna Grebeško, Margarita Baranova"
 output: html_document
 ---
-Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars)
 
-
+Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars).
 
 Darba uzdevumi:
 
@@ -39,7 +38,9 @@ Faila kolonnas:
 11:- jul_96-dec_97 - nokrisnu daudzums atbilstosaja menesi/gada
 
 #  Metodes:
-Datu normalitātes pārbaudei izmantoti QQ-ploti un Boxplot diagrammas . Datu analīzei veikti neparametriskie testi kā  Wilkoksona tests. Kā arī veikta regresijas analīze un datu vizualizācija.
+
+Šī projekta dati, kods un analīzes tiek pārvaldītas, izmantojot Git versiju kontroli un GitHub repozitoriju (https://github.com/margarita-baranova/biometrija-seminars).
+Datu normalitātes pārbaudei izmantoti QQ-ploti un Boxplot diagrammas. Datu analīzei veikti neparametriskie testi kā  Wilkoksona tests. Kā arī veikta regresijas analīze un datu vizualizācija.
 
 
 ```{r setup, include=FALSE}
@@ -347,7 +348,6 @@ qqPlot(residuals(model7))
 
 Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), taču atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
 
-
 ```{r,  echo=FALSE}
  
 model11<- lm(Sugar ~ Variety + Age, data=cukur) 
@@ -393,6 +393,8 @@ Pēc AIC vertības  modelis 4.  ir labākais, jo šī modeļa AICc vertıba ir m
 sjPlot::tab_model(model4)
 
 ```
+
+*Modeļa raksturojums:*
 Vairums augsnes tipu (piemēram, Buchan, Bulgun, Canoe, Galmara, Malbon, Mission, u.c.) parāda statistiski nozīmīgu ietekmi uz cukura daudzumu, kas liecina, ka augsnes veids var būt svarīgs faktors. Modelis kopumā izskaidro 32.14% cukura daudzuma variācijas.
 
 ### Šķiedru daudzums kā atkarīgais mainīgais:
@@ -432,6 +434,7 @@ sjPlot::tab_model(model9)
 
 ```
 
+*Modeļa raksturojums:*
 Dažām augsnēm, piemēram, Galmara, Inlet un Silkwood, ir statistiski nozīmīga ietekme uz šķiedrvielu daudzumu, taču vairums augšņu kā arī šķirņu nav statistiski nozīmīgas šajā modelī. Modelis izskaidro tikai nelielu daļu šķiedrvielu daudzuma variācijas (18.3%), kas norāda, ka ir citi svarīgi faktori, kas nav iekļauti šajā modelī.
 
 
@@ -456,31 +459,7 @@ plot(modelis_lmer1)
 
 Modelis ir statistiski būtisks, residuals liecina, ka lielākā daļa vērtību koncentrējas ap nulli (mediāna = -0.0355).
 
-### Modeļa rezultātu tabula
 
-```{r,  echo=FALSE}
- 
-sjPlot::tab_model(modelis_lmer1)
-
-```
-
-Palielinot platību, raža palielinās par 86.46 tonnām/hektārā (CI: 83.08 – 89.85). Šī ir būtiska ietekme (p < 0.001).
-Palielinoties vecumam par vienu gadu, raža samazinās par 12.70 tonnām/hektārā (CI: -17.30 – -8.11). Šī ietekme ir būtiska (p < 0.001). Ar katru nākamo ražas mēnesi raža samazinās par 5.53 tonnām/hektārā (CI: -10.56 – -0.51). Ietekme ir mazāk būtiska, bet statistiski nozīmīga (p = 0.031).
-
-### Grafiskais attēlojums
-
-```{r,  echo=FALSE}
- 
-ggplot(cukur, aes(x = Area, y = Tonn_Hect)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  labs(
-    title = "Attiecība starp platību un ražu",
-    x = "Platība (Area)",                      
-    y = "Raža (Tonnas/Hektārs)"                
-  )
-
-```
 
 ### Pievienojot modelim mainīgo cukurniedru variatāti  (variety):
 
@@ -505,8 +484,27 @@ MuMIn::AICc(modelis_lmer1,model_variety)
 ```
 
 Pec AIC vertıbas vienkāršākais modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka nekā 2. modeļa.
+### Modeļa rezultātu tabula
+
+```{r,  echo=FALSE}
+ 
+sjPlot::tab_model(modelis_lmer1)
+
+```
+
+*Modeļa raksturojums:*
+Palielinot platību, raža palielinās par 86.46 tonnām/hektārā (CI: 83.08 – 89.85). Šī ir būtiska ietekme (p < 0.001).
+Palielinoties vecumam par vienu gadu, raža samazinās par 12.70 tonnām/hektārā (CI: -17.30 – -8.11). Šī ietekme ir būtiska (p < 0.001). Ar katru nākamo ražas mēnesi raža samazinās par 5.53 tonnām/hektārā (CI: -10.56 – -0.51). Ietekme ir mazāk būtiska, bet statistiski nozīmīga (p = 0.031).
+
+
 
 #  Secinājumi:
+
+1. Ziemeļos cukura daudzums un ražas apjoms ir ievērojami augstāks nekā Dienvidos, taču šķiedru daudzums starp reģioniem atšķiras mazāk. Atšķirības starp reģioniem ir statistiski nozīmīgas, bet efekta lielumi liecina, ka šīs atšķirības nav ļoti izteiktas.
+
+2. Augsnes veids (SoilName) ir viens no svarīgākajiem faktoriem cukura un šķiedru daudzuma variācijā. Platība (Area) ir svarīgs faktors ražas prognozēšanā, kas apstiprināts jauktajā efektu modelī.
+
+
 
 
 Autoru ieguldījums:
