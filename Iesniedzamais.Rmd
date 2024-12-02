@@ -39,6 +39,7 @@ Faila kolonnas:
 11:- jul_96-dec_97 - nokrisnu daudzums atbilstosaja menesi/gada
 
 #  Metodes:
+Datu normalitātes pārbaudei izmantoti QQ-ploti un Boxplot diagrammas . Datu analīzei veikti neparametriskie testi kā  Wilkoksona tests. Kā arī veikta regresijas analīze un datu vizualizācija.
 
 
 ```{r setup, include=FALSE}
@@ -64,6 +65,7 @@ library(rcompanion)
 library(car)
 library(agricolae)
 library(lindia)
+library(MuMIn)
   
 })                             
 ```
@@ -311,23 +313,6 @@ summary(model1)
 
 Regresijas modelis izskaidro tikai 7,8% no vērtību variēšanas, modelis kopumā ir būtisks (F(3,1001)=29.22; p < 2.2e-16), bet Harvestmonth ietekme nav būtiska. 
 
-```{r,  echo=FALSE}
-
-model2 <- lm(Tonn_Hect ~ SoilName + Age, data = cukur)
-summary(model2)
-
-```
-
-Regresijas modelis izskaidro tikai 7,6% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=4.618, p < 0.0001). Atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
-
-```{r,  echo=FALSE}
-
-model3 <- lm(Tonn_Hect ~ SoilName*Age, data = cukur)
-summary(model3) 
-
-```
-
-Regresijas modelis izskaidro tikai 8,1% no vērtību variēšanas, modelis kopumā ir būtisks (F(960;44)=3.011, p < 0.0001). Taču faktoru ietekmes nav statistiski nozīmīgas.
 
 ```{r,  echo=FALSE}
 
@@ -342,13 +327,7 @@ gg_diagnose(model4, ncol = 2)
 
 Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=20.95, p < 0.0001). Turklāt atsevišķu regresoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, Cook's distance vertıbas atbilstošas, taču ir dažas ietekmīgās vērtības.
 
-```{r,  echo=FALSE}
 
-model5 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
-summary(model5)
-
-```
-Regresijas modelis izskaidro tikai 2,65% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=2.19, p = 0.001). Taču atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
 
 ```{r,  echo=FALSE}
  
@@ -379,14 +358,7 @@ qqPlot(residuals(model7))
 
 Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), tačuu atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
 
-```{r,  echo=FALSE}
- 
-model8 <- lm(Fibre ~ SoilName + DistrictPosition, data = cukur)
-summary(model8)
 
-```
-
-Regresijas modelis izskaidro tikai 2,65% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=2.19, p = 0.001). Taču atsevišķu regresoru ietekmes nav statistiski nozīmīgas.
 
 ```{r,  echo=FALSE}
  
@@ -398,17 +370,6 @@ gg_diagnose(model9, ncol = 2)
 
 Regresijas modelis izskaidro tikai 18,34% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=6.369, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka ir vairākas ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
 
-```{r,  echo=FALSE}
- 
-
-model10<- lm(Tonn_Hect ~ Variety + Age, data=cukur)
-summary(model10)
-
-gg_diagnose(model10, ncol = 2) 
-
-```
-
-Regresijas modelis izskaidro tikai 3.8% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=2.889, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības neizskatās normāli sadalītas (lielo vērtību astē), ir ietekmīgās vērtības.
 
 ```{r,  echo=FALSE}
  
@@ -439,20 +400,28 @@ summary(model13)
 gg_diagnose(model13, ncol = 2)
 
 
-
 ```
 
 Regresijas modelis izskaidro tikai 16.3% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=10.32, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, bet lielo vērtību galā ir novirze, kā arī ir ietekmīgās vērtības.
 
 ```{r,  echo=FALSE}
  
-model14<- lm(Tonn_Hect~ Variety + Age, data=cukur) 
-summary(model14) 
+AICc_model1 <- AICc(model1)
+AICc_model4 <- AICc(model4)
+AICc_model6 <- AICc(model6)
+AICc_model7 <- AICc(model7)
+AICc_model9 <- AICc(model9)
+AICc_model11 <- AICc(model11)
+AICc_model12 <- AICc(model12)
+AICc_model13 <- AICc(model13)
 
+# Salīdziniet AICc vērtības
+AICc_values <- data.frame(Model = c("Model1", "Model4", "Model6", "Model7", "Model9", "Model11", "Model12", "Model13"),
+  AICc = c(AICc_model1, AICc_model4, AICc_model6, AICc_model7, AICc_model9, AICc_model11, AICc_model12, AICc_model13))
+print(AICc_values)
 
 ```
-
-Regresijas modelis izskaidro tikai 3.8% no vērtību variēšanas, modelis kopumā ir būtisks (F(983;21)=2.889, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas.
+Pēc AIC vertības  modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka nekā 2. modeļa.
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
@@ -517,7 +486,7 @@ MuMIn::AICc(modelis_lmer1,model_variety)
 
 ```
 
-Pec AIC vertıbas vienkāršākais modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka neka 2. modeļa.
+Pec AIC vertıbas vienkāršākais modelis (1. modelis) ir labāks, jo šı modeļa AICc vertıba ir  mazaka nekā 2. modeļa.
 
 #  Secinājumi:
 
