@@ -388,6 +388,13 @@ print(AICc_values)
 
 Pēc AIC vertības  modelis 4.  ir labākais, jo šī modeļa AICc vertıba ir mazākā.
 
+```{r,  echo=FALSE}
+ 
+sjPlot::tab_model(model4)
+
+```
+Vairums augsnes tipu (piemēram, Buchan, Bulgun, Canoe, Galmara, Malbon, Mission, u.c.) parāda statistiski nozīmīgu ietekmi uz cukura daudzumu, kas liecina, ka augsnes veids var būt svarīgs faktors. Modelis kopumā izskaidro 32.14% cukura daudzuma variācijas.
+
 ### Šķiedru daudzums kā atkarīgais mainīgais:
 
 ```{r,  echo=FALSE}
@@ -419,6 +426,13 @@ MuMIn::AICc(model9, model12, model13)
 
 Pēc AIC vertības  modelis 9. ir labākais, jo šı modeļa AICc vertıba ir mazākā.
 
+```{r,  echo=FALSE}
+ 
+sjPlot::tab_model(model9)
+
+```
+
+Dažām augsnēm, piemēram, Galmara, Inlet un Silkwood, ir statistiski nozīmīga ietekme uz šķiedrvielu daudzumu, taču vairums augšņu kā arī šķirņu nav statistiski nozīmīgas šajā modelī. Modelis izskaidro tikai nelielu daļu šķiedrvielu daudzuma variācijas (18.3%), kas norāda, ka ir citi svarīgi faktori, kas nav iekļauti šajā modelī.
 
 
 ```{r, echo=FALSE}
