@@ -324,9 +324,7 @@ gg_diagnose(model4, ncol = 2)
 
 ```
 
-
 Regresijas modelis izskaidro tikai 31,4% no vērtību variēšanas, modelis kopumā ir būtisks (F(981;23)=20.95, p < 0.0001). Turklāt atsevišķu regresoru ietekmes nav statistiski nozīmīgas.Pēc modeļa diagnostikas novērots, ka atlikumu vērtības izskatās normāli sadalītas, Cook's distance vertıbas atbilstošas, taču ir dažas ietekmīgās vērtības.
-
 
 
 ```{r,  echo=FALSE}
@@ -359,18 +357,6 @@ qqPlot(residuals(model7))
 Diagramma neuzrāda acīmredzamas sistemātiskas kļūdas (piemēram, izliekumu vai līkni), taču atlikumu lielums norāda, kair diezgan plaša atlikumu izkliede ap nulli, kas varētu norādī uz neprecizitāti. Kā arī modelis izskaidro tikai nelielu datu variāciju. Atlikumi neatbilst precīzi normālam sadalījumam.
 
 
-
-```{r,  echo=FALSE}
- 
-model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
-summary(model9) 
-gg_diagnose(model9, ncol = 2)
-
-```
-
-Regresijas modelis izskaidro tikai 18,34% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=6.369, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka ir vairākas ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
-
-
 ```{r,  echo=FALSE}
  
 model11<- lm(Sugar ~ Variety + Age, data=cukur) 
@@ -395,6 +381,16 @@ Regresijas modelis izskaidro tikai 16.9% no vērtību variēšanas, modelis kopu
 
 ```{r,  echo=FALSE}
  
+model9 <- lm(Fibre ~ SoilName + Variety, data = cukur)
+summary(model9) 
+gg_diagnose(model9, ncol = 2)
+
+```
+
+Regresijas modelis izskaidro tikai 18,34% no vērtību variēšanas, modelis kopumā ir būtisks (F(962;42)=6.369, p < 0.0001). Taču atsevišķu faktoru ietekmes nav statistiski nozīmīgas. Pēc modeļa diagnostikas novērots, ka ir vairākas ietekmīgās vērtības, atlikumu vērtības izskatās normāli sadalītas.
+
+```{r,  echo=FALSE}
+ 
 model13<- lm(Fibre ~ Variety + Age, data=cukur) 
 summary(model13) 
 gg_diagnose(model13, ncol = 2)
@@ -406,22 +402,29 @@ Regresijas modelis izskaidro tikai 16.3% no vērtību variēšanas, modelis kopu
 
 ```{r,  echo=FALSE}
  
+MuMIn::AICc(model9, model12, model13) 
+
+```
+
+Pēc AIC vertības  modelis 9. modelis ir labākais, jo šı modeļa AICc vertıba ir mazākā.
+
+```{r,  echo=FALSE}
+ 
 AICc_model1 <- AICc(model1)
 AICc_model4 <- AICc(model4)
 AICc_model6 <- AICc(model6)
 AICc_model7 <- AICc(model7)
-AICc_model9 <- AICc(model9)
 AICc_model11 <- AICc(model11)
-AICc_model12 <- AICc(model12)
-AICc_model13 <- AICc(model13)
 
 
-AICc_values <- data.frame(Model = c("Model1", "Model4", "Model6", "Model7", "Model9", "Model11", "Model12", "Model13"),
-  AICc = c(AICc_model1, AICc_model4, AICc_model6, AICc_model7, AICc_model9, AICc_model11, AICc_model12, AICc_model13))
+AICc_values <- data.frame(Model = c("Model1", "Model4", "Model6", "Model7", "Model11"),
+                          AICc = c(AICc_model1, AICc_model4, AICc_model6, AICc_model7, AICc_model11))
+
 print(AICc_values)
 
 ```
-Pēc AIC vertības  modelis 9. modelis ir labākais, jo šı modeļa AICc vertıba ir mazākā.
+
+Pēc AIC vertības  modelis 4. modelis ir labākais, jo šī modeļa AICc vertıba ir mazākā.
 
 ```{r, echo=FALSE}
 suppressPackageStartupMessages({
@@ -441,7 +444,9 @@ summary(modelis_lmer1)
 plot(modelis_lmer1)
 
 ```
-modelis ir statistiski būtisks, residuals liecina, ka lielākā daļa vērtību koncentrējas ap nulli (mediāna = -0.0355).
+
+Modelis ir statistiski būtisks, residuals liecina, ka lielākā daļa vērtību koncentrējas ap nulli (mediāna = -0.0355).
+
 ### Modeļa rezultātu tabula
 
 ```{r,  echo=FALSE}
@@ -449,10 +454,12 @@ modelis ir statistiski būtisks, residuals liecina, ka lielākā daļa vērtību
 sjPlot::tab_model(modelis_lmer1)
 
 ```
+
 Palielinot platību, raža palielinās par 86.46 tonnām/hektārā (CI: 83.08 – 89.85). Šī ir būtiska ietekme (p < 0.001).
 Palielinoties vecumam par vienu gadu, raža samazinās par 12.70 tonnām/hektārā (CI: -17.30 – -8.11). Šī ietekme ir būtiska (p < 0.001). Ar katru nākamo ražas mēnesi raža samazinās par 5.53 tonnām/hektārā (CI: -10.56 – -0.51). Ietekme ir mazāk būtiska, bet statistiski nozīmīga (p = 0.031).
 
 ### Grafiskais attēlojums
+
 ```{r,  echo=FALSE}
  
 ggplot(cukur, aes(x = Area, y = Tonn_Hect)) +
@@ -466,7 +473,7 @@ ggplot(cukur, aes(x = Area, y = Tonn_Hect)) +
 
 ```
 
-### pievienojot modelim mainīgo cukurniedru variatāti  (variety):
+### Pievienojot modelim mainīgo cukurniedru variatāti  (variety):
 
 ```{r,  echo=FALSE}
  
@@ -479,7 +486,9 @@ sjPlot::tab_model(model_variety)
 ```
 
 Fiksētie efekti izskaidro 70.5% no variācijas, Novērojama ļoti maza ietekme varietāte (1.776).
+
 #Jauktu efektu modeļu salīdzinājums:
+
 ```{r,  echo=FALSE}
  
 MuMIn::AICc(modelis_lmer1,model_variety) 
